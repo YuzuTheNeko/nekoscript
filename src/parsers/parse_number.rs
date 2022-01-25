@@ -1,3 +1,5 @@
+use std::cell::RefCell;
+use std::rc::Rc;
 use crate::constants::operators::SUB;
 use crate::core::data_types::DataTypes;
 use crate::core::nodes::Nodes;
@@ -17,7 +19,9 @@ pub fn parse_number(stream: &mut TokenStream) -> Nodes {
     let int = stream.read_while(&is_digit);
 
     if let Ok(int) = int.parse::<i64>() {
-        Nodes::Value(DataTypes::Int(int))
+        Nodes::Value(
+            Rc::new(RefCell::new(DataTypes::Int(int)))
+        )
     } else {
         stream.panic(&format!("{} is not a valid integer", int));
         unreachable!()

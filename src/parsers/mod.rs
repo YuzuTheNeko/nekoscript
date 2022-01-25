@@ -10,3 +10,7 @@ pub mod parse_bool;
 pub mod parse_variable;
 pub mod parse_scope;
 pub mod parse_punc;
+pub mod parse_special_operator;
+pub mod parse_func_usage;
+pub mod parse_dyn_fn;
+pub mod parse_call;

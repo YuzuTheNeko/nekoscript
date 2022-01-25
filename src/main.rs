@@ -4,6 +4,7 @@
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
+use crate::core::interpreter::Interpreter;
 use crate::core::token_stream::TokenStream;
 
 mod core;
@@ -26,4 +27,8 @@ fn main() {
     stream.start();
 
     println!("Parsed {} nodes", stream.nodes.len());
+
+    let itr = Interpreter::new(stream.nodes);
+
+    itr.run();
 }

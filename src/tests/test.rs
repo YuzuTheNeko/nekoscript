@@ -10,7 +10,4 @@ pub fn test() {
 
     let d = scope.variables.read().unwrap();
 
-    if let Some(t) = d.get("") {
-        across(t);
-    }
 }

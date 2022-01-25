@@ -8,6 +8,8 @@ pub const BOOL_TYPE: &str = "bool";
 
 pub const OBJECT_TYPE: &str = "object";
 
+pub const FN_TYPE: &str = "function";
+
 pub const NULL_TYPE: &str = "null";
 
 pub const DATA_TYPES: [&str; 6] = [

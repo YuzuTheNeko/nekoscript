@@ -9,8 +9,6 @@ pub fn parse_op(stream: &mut TokenStream) -> Nodes {
 
     if op.eq(SUB) {
         Nodes::Operator(OperatorTypes::Sub)
-    } else if op.eq(ASSIGN) {
-        Nodes::Operator(OperatorTypes::Assign)
     } else if op.eq(ADD) {
         Nodes::Operator(OperatorTypes::Add)
     } else if op.eq(EQUALS) {

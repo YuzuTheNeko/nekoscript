@@ -1,1 +1,7 @@
-neko uwu = 1 + 1;
+neko o = dyn () {};
+
+o = 1;
+
+o = "";
+
+log("k", "ok", typeof(o));

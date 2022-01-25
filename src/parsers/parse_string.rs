@@ -1,3 +1,5 @@
+use std::cell::RefCell;
+use std::rc::Rc;
 use crate::core::data_types::DataTypes;
 use crate::core::nodes::Nodes;
 use crate::core::token_stream::TokenStream;
@@ -15,5 +17,9 @@ pub fn parse_string(stream: &mut TokenStream) -> Nodes {
 
     stream.skip_punc('"');
 
-    Nodes::Value(DataTypes::Text(str))
+    Nodes::Value(
+        Rc::new(RefCell::new(
+            DataTypes::Text(str)
+        ))
+    )
 }

@@ -1,1 +1,1 @@
-pub const PUNCTUATION_CHARACTERS: &str = "().->[]{};";
+pub const PUNCTUATION_CHARACTERS: &str = "().->[]{};,";

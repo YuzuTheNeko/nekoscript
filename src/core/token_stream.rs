@@ -7,7 +7,7 @@ use crate::parsers::parse_number::parse_number;
 use crate::parsers::parse_op::parse_op;
 use crate::parsers::parse_punc::parse_punc;
 use crate::parsers::parse_string::parse_string;
-use crate::util::chars::{is_digit, is_id_start, is_newline, is_op, is_punc, is_quote, is_skippable_char};
+use crate::util::chars::{is_digit, is_id_start, is_newline, is_op, is_punc, is_quote, is_skippable_char, is_whitespace};
 
 #[derive(Default)]
 pub struct TokenStream<'a> {
@@ -155,6 +155,7 @@ impl<'a> TokenStream<'a> {
     }
 
     pub fn is_punc(&mut self, ch: char) -> bool {
+        self.skip_useless();
         self.char().eq(&(ch as u8))
     }
 
@@ -181,6 +182,10 @@ impl<'a> TokenStream<'a> {
                 self.skip_punc(';')
             }
         }
+    }
+
+    pub fn is_special_op(&mut self, op: &str) -> bool {
+        self.str(op.len()).eq(&op)
     }
 
     pub fn char(&self) -> u8 {

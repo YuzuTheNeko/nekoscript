@@ -3,7 +3,7 @@ use crate::core::nodes::Nodes;
 use crate::core::scope::Scope;
 use crate::runtime::apply_bin::apply_bin;
 
-pub fn resolve_binary<'a>(itr: &Interpreter, scope: &Scope, node: &Nodes) -> IReturn<'a> {
+pub fn resolve_binary(itr: &Interpreter, scope: &Scope, node: &Nodes) -> IReturn {
     let (op, left, right) = node.to_bin();
 
     match itr.execute(scope, left) {

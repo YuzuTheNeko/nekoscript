@@ -1,12 +1,20 @@
+use std::cell::RefCell;
+use std::rc::Rc;
 use crate::core::data_types::DataTypes;
-use crate::core::operator_types::OperatorTypes;
+use crate::core::operator_types::{OperatorTypes, SpecialOperatorTypes};
 
+#[derive(Clone)]
 pub enum Nodes {
     Keyword(String),
-    Value(DataTypes),
+    Value(Rc<RefCell<DataTypes>>),
     Operator(OperatorTypes),
     VariableDef {
         name: String,
+        value: Box<Nodes>
+    },
+    SpecialAssignment {
+        op: SpecialOperatorTypes,
+        keyword: String,
         value: Box<Nodes>
     },
     FnDef {
@@ -15,7 +23,8 @@ pub enum Nodes {
         body: Box<Nodes>
     },
     FnCall {
-        name: String,
+        name: Option<String>,
+        func: Option<Box<Nodes>>,
         args: Vec<Box<Nodes>>
     },
     BinaryExpr {
@@ -41,6 +50,22 @@ impl Nodes {
             _ => false
         }
     }
+
+    pub fn is_dyn_fn(&self) -> bool {
+        match self {
+            Nodes::Value(v) => {
+                (*v.borrow()).is_dyn_fn()
+            }
+            _ => false
+        }
+    }
+
+    pub fn is_fn(&self) -> bool {
+        match self {
+            Nodes::FnDef { .. } => true,
+            _ => false
+        }
+    }
 }
 
 impl Nodes {
@@ -48,6 +73,13 @@ impl Nodes {
         match self {
             Nodes::Operator(op) => op,
             _ => panic!("Node not an operator.")
+        }
+    }
+
+    pub fn to_special_assignment(&self) -> (&SpecialOperatorTypes, &String, &Box<Nodes>) {
+        match self {
+            Nodes::SpecialAssignment { keyword, op, value } => (op, keyword, value),
+            _ => panic!("Node is not sp assign")
         }
     }
 
@@ -62,6 +94,20 @@ impl Nodes {
         match self {
             Nodes::VariableDef { name, value } => (name, value),
             _ => panic!("Node is not variable.")
+        }
+    }
+
+    pub fn to_fn_def(&self) -> (&String, &Vec<String>, &Box<Nodes>) {
+        match self {
+            Nodes::FnDef { name, params, body } => (name, params, body),
+            _ => panic!("Node not fn def.")
+        }
+    }
+
+    pub fn to_fn_c(&self) -> (&Option<String>, &Vec<Box<Nodes>>, &Option<Box<Nodes>>) {
+        match self {
+            Nodes::FnCall { name, args, func } => (name, args, func),
+            _ => panic!("Node not func call.")
         }
     }
 

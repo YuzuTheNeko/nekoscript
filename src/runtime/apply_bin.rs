@@ -1,28 +1,30 @@
+use std::cell::RefCell;
 use std::ops::{Add, Sub};
+use std::rc::Rc;
 use crate::core::data_types::DataTypes;
 use crate::core::interpreter::IReturn;
 use crate::core::operator_types::OperatorTypes;
 
-pub fn apply_bin<'a>(op: &OperatorTypes, left: &DataTypes, right: &DataTypes) -> IReturn<'a> {
+pub fn apply_bin(op: &OperatorTypes, left: Rc<RefCell<DataTypes>>, right: Rc<RefCell<DataTypes>>) -> IReturn {
+    let lhs = &mut left.borrow_mut();
+    let rhs = &mut right.borrow_mut();
+
     match op {
         OperatorTypes::Equals => {
-            Ok(&DataTypes::Bool(left.is_equal(&right)))
+            Ok(DataTypes::wrap(DataTypes::Bool(lhs.is_equal(rhs))))
         },
         OperatorTypes::Add => {
-            if !left.is_int() || !right.is_int() {
-                let mut str = left.to_string();
-                str.push_str(&right.to_string());
-                Ok(&DataTypes::Text(str))
+            if !lhs.is_int() || !rhs.is_int() {
+                let mut str = rhs.to_string();
+                str.push_str(&lhs.to_string());
+                Ok(DataTypes::wrap(DataTypes::Text(str)))
             } else {
-                Ok(&DataTypes::Int(left.to_int().add(right.to_int())))
+                Ok(DataTypes::wrap(DataTypes::Int(lhs.to_int().add(rhs.to_int()))))
             }
         },
         OperatorTypes::Sub => {
-            Ok(&DataTypes::Int(left.to_int().sub(right.to_int())))
+            Ok(DataTypes::wrap(DataTypes::Int(lhs.to_int().sub(rhs.to_int()))))
         },
-        OperatorTypes::Assign => {
-            panic!("Unsupported")
-        }
-        _ => Ok(&DataTypes::Bool(false))
+        _ => Ok(DataTypes::wrap(DataTypes::Bool(false)))
     }
 }

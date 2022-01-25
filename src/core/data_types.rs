@@ -1,39 +1,23 @@
 use std::borrow::Borrow;
+use std::cell::{RefCell, RefMut};
 use std::collections::HashMap;
 use std::rc::Rc;
 use std::sync::RwLock;
-use crate::constants::data_types::{ARRAY_TYPE, BOOL_TYPE, INT_TYPE, NULL_TYPE, OBJECT_TYPE, TEXT_TYPE};
+use crate::constants::data_types::{ARRAY_TYPE, BOOL_TYPE, FN_TYPE, INT_TYPE, NULL_TYPE, OBJECT_TYPE, TEXT_TYPE};
+use crate::core::nodes::Nodes;
 
+#[derive(Clone)]
 pub enum DataTypes {
     Text(String),
     Int(i64),
+    Fn {
+        params: Vec<String>,
+        body: Box<Nodes>
+    },
     Bool(bool),
     Null,
     Object(Rc<RwLock<HashMap<String, DataTypes>>>),
     Array(Rc<RwLock<Vec<DataTypes>>>)
-}
-
-impl Clone for DataTypes {
-    fn clone(&self) -> Self {
-        match self {
-            Self::Text(d) => Self::Text(d.clone()),
-            Self::Int(i) => Self::Int(i.clone()),
-            Self::Null => Self::Null,
-            Self::Bool(b) => Self::Bool(b.clone()),
-            Self::Array(b) => {
-                let mut clone = vec![];
-
-                let reader = b.read().unwrap();
-
-                for i in reader.iter() {
-                    clone.push(i.clone())
-                }
-
-                Self::Array(Rc::new(RwLock::new(clone)))
-            },
-            _ => panic!("Object cloning is not supported.")
-        }
-    }
 }
 
 impl DataTypes {
@@ -65,6 +49,13 @@ impl DataTypes {
         }
     }
 
+    pub fn to_mut_int(&mut self) -> &mut i64 {
+        match self {
+            DataTypes::Int(i) => i,
+            _ => panic!("Value not an int.")
+        }
+    }
+
     pub fn to_text(&self) -> &String {
         match self {
             DataTypes::Text(s) => s,
@@ -88,12 +79,17 @@ impl DataTypes {
             DataTypes::Bool(_) => BOOL_TYPE,
             DataTypes::Int(_) => INT_TYPE,
             DataTypes::Text(_) => TEXT_TYPE,
+            DataTypes::Fn { .. } => FN_TYPE,
             DataTypes::Object(_) => OBJECT_TYPE
         }
     }
 
-    pub fn null() -> Self {
-        Self::Null
+    pub fn null() -> Rc<RefCell<DataTypes>> {
+        Rc::new(RefCell::new(Self::Null))
+    }
+
+    pub fn wrap(data: DataTypes) -> Rc<RefCell<DataTypes>> {
+        Rc::new(RefCell::new(data))
     }
 }
 
@@ -101,6 +97,13 @@ impl DataTypes {
     pub fn is_int(&self) -> bool {
         match self {
             DataTypes::Int(_) => true,
+            _ => false
+        }
+    }
+
+    pub fn is_dyn_fn(&self) -> bool {
+        match self {
+            DataTypes::Fn { .. } => true,
             _ => false
         }
     }
@@ -118,7 +121,7 @@ impl DataTypes {
         self.kind().eq(other)
     }
 
-    pub fn is_equal(&self, other: &DataTypes) -> bool {
+    pub fn is_equal(&self, other: &mut RefMut<DataTypes>) -> bool {
         if self.is_type(other.kind()) {
             match self {
                 DataTypes::Text(s) => s.eq(other.to_text()),
@@ -138,6 +141,7 @@ impl DataTypes {
             Self::Text(s) => s.to_string(),
             Self::Int(s) => s.to_string(),
             Self::Bool(s) => s.to_string(),
+            Self::Null => NULL_TYPE.to_string(),
             _ => panic!("Cannot deserialize {} to string.", self.kind())
         }
     }
