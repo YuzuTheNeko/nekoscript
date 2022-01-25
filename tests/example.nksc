@@ -10,4 +10,4 @@ if o == 1 {
     log("no L");
 };
 
-log("Executed in " + (ms - system_time()) + "ms");
+log("Executed in " + (system_time() - ms) + "ms");
