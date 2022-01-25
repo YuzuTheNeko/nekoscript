@@ -1,7 +1,9 @@
-neko o = dyn () {};
+neko o = 1;
 
-o = 1;
+o -= 1;
 
-o = "";
-
-log("k", "ok", typeof(o));
+if o == 1 {
+    log("yuh");
+} else {
+    log("no L");
+}

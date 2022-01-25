@@ -14,3 +14,4 @@ pub mod parse_special_operator;
 pub mod parse_func_usage;
 pub mod parse_dyn_fn;
 pub mod parse_call;
+pub mod parse_if;

@@ -184,8 +184,23 @@ impl<'a> TokenStream<'a> {
         }
     }
 
+    pub fn fake_read_while(&mut self, f: ReaderFn) -> String {
+        self.skip_useless();
+
+        let mut str = String::new();
+
+        let mut i = 0;
+
+        while !self.eof() && f(self.at(i)) {
+            str.push(self.at(i) as char);
+            i += 1;
+        }
+
+        str
+    }
+
     pub fn is_special_op(&mut self, op: &str) -> bool {
-        self.str(op.len()).eq(&op)
+        self.fake_read_while(&is_op).eq(op)
     }
 
     pub fn char(&self) -> u8 {

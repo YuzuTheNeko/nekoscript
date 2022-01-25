@@ -12,6 +12,12 @@ pub enum Nodes {
         name: String,
         value: Box<Nodes>
     },
+    If {
+        condition: Box<Nodes>,
+        when_true: Box<Nodes>,
+        when_false: Option<Box<Nodes>>,
+        races: Vec<(Nodes, Nodes)>
+    },
     SpecialAssignment {
         op: SpecialOperatorTypes,
         keyword: String,
@@ -33,7 +39,7 @@ pub enum Nodes {
         right: Box<Nodes>
     },
     Punc(String),
-    Scope(Vec<Box<Nodes>>)
+    Scope(Vec<Nodes>)
 }
 
 impl Nodes {
@@ -60,6 +66,13 @@ impl Nodes {
         }
     }
 
+    pub fn is_if(&self) -> bool {
+        match self {
+            Nodes::If { .. } => true,
+            _ => false
+        }
+    }
+
     pub fn is_fn(&self) -> bool {
         match self {
             Nodes::FnDef { .. } => true,
@@ -69,10 +82,47 @@ impl Nodes {
 }
 
 impl Nodes {
+    pub fn kind(&self) -> &str {
+        match self {
+            Nodes::If { .. } => "If",
+            Nodes::FnDef { .. } => "FnDef",
+            Nodes::BinaryExpr { .. } => "BinExpr",
+            Nodes::Scope(_) => "Scope",
+            Nodes::Value(_) => "Value",
+            Nodes::FnCall { .. } => "FnCall",
+            Nodes::SpecialAssignment { .. } => "SpecialAssigment",
+            Nodes::VariableDef { .. } => "VarDef",
+            Nodes::Punc(_) => "Punc",
+            Nodes::Operator(_) => "Op",
+            Nodes::Keyword(_) => "Keyword"
+        }
+    }
+}
+
+impl Nodes {
     pub fn to_op(&self) -> &OperatorTypes {
         match self {
             Nodes::Operator(op) => op,
             _ => panic!("Node not an operator.")
+        }
+    }
+
+    pub fn to_if(&self) -> (&Box<Nodes>, &Box<Nodes>, &Option<Box<Nodes>>, &Vec<(Nodes, Nodes)>) {
+        match self {
+            Nodes::If { condition, when_true, when_false, races } => (
+                condition,
+                when_true,
+                when_false,
+                races
+                ),
+            _ => panic!("Node not if.")
+        }
+    }
+
+    pub fn to_scope(&self) -> &Vec<Nodes> {
+        match self {
+            Nodes::Scope(c) => c,
+            _ => panic!("Node not a scope")
         }
     }
 

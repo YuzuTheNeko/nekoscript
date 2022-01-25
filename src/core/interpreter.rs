@@ -6,7 +6,9 @@ use crate::core::return_types::ReturnTypes;
 use crate::core::scope::Scope;
 use crate::runtime::resolve_binary::resolve_binary;
 use crate::runtime::resolve_func_call::resolve_func_call;
+use crate::runtime::resolve_if::resolve_if;
 use crate::runtime::resolve_keyword::resolve_keyword;
+use crate::runtime::resolve_scope::resolve_scope;
 use crate::runtime::resolve_special_assignment::resolve_special_assignment;
 use crate::runtime::resolve_variable::resolve_variable;
 
@@ -44,9 +46,11 @@ impl Interpreter {
             Nodes::VariableDef { .. } => resolve_variable(self, scope, node),
             Nodes::FnCall { .. } => resolve_func_call(self, scope, node),
             Nodes::Keyword(_) => resolve_keyword(self, scope, node),
+            Nodes::Scope { .. } => resolve_scope(self, scope, node),
             Nodes::BinaryExpr { .. } => resolve_binary(self, scope, node),
             Nodes::SpecialAssignment { .. } => resolve_special_assignment(self, scope, node),
             Nodes::Value(value) => Ok(value.clone()),
+            Nodes::If { .. } => resolve_if(self, scope, node),
             _ => Ok(DataTypes::null())
         }
     }

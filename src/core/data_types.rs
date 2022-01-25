@@ -101,6 +101,15 @@ impl DataTypes {
         }
     }
 
+    pub fn is_truthy(&self) -> bool {
+        match self {
+            DataTypes::Bool(b) => b.eq(&true),
+            DataTypes::Int(b) => b.gt(&0),
+            DataTypes::Text(b) => !b.is_empty(),
+            _ => true
+        }
+    }
+
     pub fn is_dyn_fn(&self) -> bool {
         match self {
             DataTypes::Fn { .. } => true,

@@ -10,6 +10,14 @@ pub const DIV: &str = "/";
 
 pub const OPERATOR_TYPES: &str = "=+-*/";
 
+pub const OPERATORS: [&str; 5] = [
+    MULTI,
+    SUB,
+    DIV,
+    ADD,
+    EQUALS
+];
+
 pub const SUM_EQUAL: &str = "+=";
 pub const SUB_EQUAL: &str = "-=";
 

@@ -1,6 +1,8 @@
-pub const IF_KEYWORD: &str = "wif";
+pub const IF_KEYWORD: &str = "if";
 
-pub const ELSE_KEYWORD: &str = "ewse";
+pub const ELSE_KEYWORD: &str = "else";
+
+pub const ELSE_IF_KEYWORD: &str = "else if";
 
 pub const VARIABLE_KEYWORD: &str = "neko";
 
