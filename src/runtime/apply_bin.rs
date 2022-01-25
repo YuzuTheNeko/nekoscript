@@ -15,8 +15,8 @@ pub fn apply_bin(op: &OperatorTypes, left: Rc<RefCell<DataTypes>>, right: Rc<Ref
         },
         OperatorTypes::Add => {
             if !lhs.is_int() || !rhs.is_int() {
-                let mut str = rhs.to_string();
-                str.push_str(&lhs.to_string());
+                let mut str = lhs.to_string();
+                str.push_str(&rhs.to_string());
                 Ok(DataTypes::wrap(DataTypes::Text(str)))
             } else {
                 Ok(DataTypes::wrap(DataTypes::Int(lhs.to_int().add(rhs.to_int()))))
