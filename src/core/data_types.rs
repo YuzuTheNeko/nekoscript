@@ -28,6 +28,13 @@ impl DataTypes {
         }
     }
 
+    pub fn to_dyn_fn(&self) -> (&Vec<String>, &Box<Nodes>) {
+        match self {
+            DataTypes::Fn { params, body } => (params, body),
+            _ => panic!("Node not dyn fn")
+        }
+    }
+
     pub fn to_int(&self) -> &i64 {
         match self {
             DataTypes::Int(i) => i,

@@ -134,6 +134,10 @@ impl<'a> TokenStream<'a> {
 
         let char = self.char();
 
+        if char.eq(&0) {
+            return Nodes::Value(DataTypes::null())
+        }
+
         if is_op(char) {
             return parse_op(self)
         } else if is_id_start(char) {

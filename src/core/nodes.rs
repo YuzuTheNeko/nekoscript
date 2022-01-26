@@ -1,5 +1,6 @@
 use std::cell::RefCell;
 use std::rc::Rc;
+use crate::constants::keywords::WHILE_KEYWORD;
 use crate::core::data_types::DataTypes;
 use crate::core::operator_types::{OperatorTypes, SpecialOperatorTypes};
 
@@ -37,6 +38,15 @@ pub enum Nodes {
         op: OperatorTypes,
         left: Box<Nodes>,
         right: Box<Nodes>
+    },
+    DynFnCall {
+        params: Vec<String>,
+        body: Box<Nodes>,
+        args: Vec<Box<Nodes>>
+    },
+    While {
+        condition: Box<Nodes>,
+        scope: Box<Nodes>
     },
     Punc(String),
     Scope(Vec<Nodes>)
@@ -84,6 +94,7 @@ impl Nodes {
 impl Nodes {
     pub fn kind(&self) -> &str {
         match self {
+            Nodes::DynFnCall { .. } => "dyn fn call",
             Nodes::If { .. } => "If",
             Nodes::FnDef { .. } => "FnDef",
             Nodes::BinaryExpr { .. } => "BinExpr",
@@ -91,6 +102,7 @@ impl Nodes {
             Nodes::Value(_) => "Value",
             Nodes::FnCall { .. } => "FnCall",
             Nodes::SpecialAssignment { .. } => "SpecialAssigment",
+            Nodes::While { .. } => WHILE_KEYWORD,
             Nodes::VariableDef { .. } => "VarDef",
             Nodes::Punc(_) => "Punc",
             Nodes::Operator(_) => "Op",
@@ -104,6 +116,26 @@ impl Nodes {
         match self {
             Nodes::Operator(op) => op,
             _ => panic!("Node not an operator.")
+        }
+    }
+
+    pub fn to_dyn_fn_call(&self) -> (&Vec<String>, &Vec<Box<Nodes>>, &Box<Nodes>) {
+        match self {
+            Nodes::DynFnCall { params, body, args } => (params, args, body),
+            _ => panic!("Node not dyn call")
+        }
+    }
+
+    pub fn to_dyn_fn(&self) -> Rc<RefCell<DataTypes>> {
+        match self {
+            Nodes::Value(r) => r.clone(),
+            _ => panic!("Node not dyn fn")
+        }
+    }
+    pub fn to_while(&self) -> (&Box<Nodes>, &Box<Nodes>) {
+        match self {
+            Nodes::While { condition, scope } => (condition, scope),
+            _ => panic!("Node not while.")
         }
     }
 

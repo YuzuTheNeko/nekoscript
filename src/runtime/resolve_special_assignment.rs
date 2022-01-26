@@ -26,15 +26,15 @@ pub fn resolve_special_assignment(itr: &Interpreter, scope: &Scope, node: &Nodes
                     match op {
                         SpecialOperatorTypes::Assign => {
                             *v = other.clone();
-                            Ok(var.clone())
+                            Ok(DataTypes::null())
                         }
                         SpecialOperatorTypes::AddAssign => {
                             *v = DataTypes::Int(v.to_int().add(other.to_int()));
-                            Ok(var.clone())
+                            Ok(DataTypes::null())
                         }
                         SpecialOperatorTypes::SubAssign => {
                             *v = DataTypes::Int(v.to_int().rem(other.to_int()));
-                            Ok(var.clone())
+                            Ok(DataTypes::null())
                         }
                     }
                 }

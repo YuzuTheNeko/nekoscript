@@ -1,10 +1,11 @@
-use crate::constants::operators::{ADD, ASSIGN, EQUALS, SUB};
+use crate::constants::operators::{ADD, ASSIGN, EQUALS, NOT_EQUALS, SUB};
 
 #[derive(Clone)]
 pub enum OperatorTypes {
     Equals,
     Add,
-    Sub
+    Sub,
+    NotEquals
 }
 
 #[derive(Clone)]
@@ -19,13 +20,14 @@ impl OperatorTypes {
         match self {
             Self::Equals => EQUALS,
             Self::Sub => SUB,
-            Self::Add => ADD
+            Self::Add => ADD,
+            Self::NotEquals => NOT_EQUALS
         }
     }
 
     pub fn prec(&self) -> u8 {
         match self {
-            Self::Equals => 7,
+            Self::Equals | Self::NotEquals => 7,
             Self::Sub | Self::Add => 10
         }
     }

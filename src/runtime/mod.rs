@@ -7,3 +7,7 @@ pub mod call_native_fn;
 pub mod resolve_keyword;
 pub mod resolve_if;
 pub mod resolve_scope;
+pub mod resolve_while;
+pub mod call_function;
+pub mod resolve_func_def;
+pub mod resolve_dyn_call;

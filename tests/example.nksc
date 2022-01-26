@@ -1,13 +1,3 @@
-neko ms = system_time();
-
-neko o = 1;
-
-o -= 1;
-
-if o == 1 {
-    log("yuh");
-} else {
-    log("no L");
-};
-
-log("Executed in " + (system_time() - ms) + "ms");
+log(dyn (x) {
+    log(x);
+}("xd"));

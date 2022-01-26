@@ -8,12 +8,15 @@ pub const MULTI: &str = "*";
 
 pub const DIV: &str = "/";
 
-pub const OPERATOR_TYPES: &str = "=+-*/";
+pub const NOT_EQUALS: &str = "!=";
 
-pub const OPERATORS: [&str; 5] = [
+pub const OPERATOR_TYPES: &str = "=+-*/!";
+
+pub const OPERATORS: [&str; 6] = [
     MULTI,
     SUB,
     DIV,
+    NOT_EQUALS,
     ADD,
     EQUALS
 ];

@@ -5,12 +5,15 @@ use crate::core::nodes::Nodes;
 use crate::core::return_types::ReturnTypes;
 use crate::core::scope::Scope;
 use crate::runtime::resolve_binary::resolve_binary;
+use crate::runtime::resolve_dyn_call::resolve_dyn_call;
 use crate::runtime::resolve_func_call::resolve_func_call;
+use crate::runtime::resolve_func_def::resolve_func_def;
 use crate::runtime::resolve_if::resolve_if;
 use crate::runtime::resolve_keyword::resolve_keyword;
 use crate::runtime::resolve_scope::resolve_scope;
 use crate::runtime::resolve_special_assignment::resolve_special_assignment;
 use crate::runtime::resolve_variable::resolve_variable;
+use crate::runtime::resolve_while::resolve_while;
 
 pub struct Interpreter {
     pub nodes: Vec<Nodes>
@@ -43,9 +46,12 @@ impl Interpreter {
 
     pub fn execute(&self, scope: &Scope, node: &Nodes) -> IReturn {
         match node {
+            Nodes::DynFnCall { .. } => resolve_dyn_call(self, scope, node),
             Nodes::VariableDef { .. } => resolve_variable(self, scope, node),
             Nodes::FnCall { .. } => resolve_func_call(self, scope, node),
+            Nodes::While { .. } => resolve_while(self, scope, node),
             Nodes::Keyword(_) => resolve_keyword(self, scope, node),
+            Nodes::FnDef { .. } => resolve_func_def(self, scope, node),
             Nodes::Scope { .. } => resolve_scope(self, scope, node),
             Nodes::BinaryExpr { .. } => resolve_binary(self, scope, node),
             Nodes::SpecialAssignment { .. } => resolve_special_assignment(self, scope, node),

@@ -25,6 +25,9 @@ pub fn apply_bin(op: &OperatorTypes, left: Rc<RefCell<DataTypes>>, right: Rc<Ref
         OperatorTypes::Sub => {
             Ok(DataTypes::wrap(DataTypes::Int(lhs.to_int().sub(rhs.to_int()))))
         },
+        OperatorTypes::NotEquals => {
+            Ok(DataTypes::wrap(DataTypes::Bool(!lhs.is_equal(rhs))))
+        }
         _ => Ok(DataTypes::wrap(DataTypes::Bool(false)))
     }
 }
