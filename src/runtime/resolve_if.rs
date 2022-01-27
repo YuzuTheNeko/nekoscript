@@ -4,17 +4,8 @@ use crate::core::nodes::Nodes;
 use crate::core::scope::Scope;
 use crate::Interpreter;
 
-pub fn resolve_if(
-    itr: &Interpreter,
-    scope: &Scope,
-    node: &Nodes
-) -> IReturn {
-    let (
-        condition,
-        when_true,
-        when_false,
-        races
-    ) = node.to_if();
+pub fn resolve_if(itr: &Interpreter, scope: &Scope, node: &Nodes) -> IReturn {
+    let (condition, when_true, when_false, races) = node.to_if();
 
     match itr.execute(scope, condition) {
         Ok(val) => {
@@ -43,7 +34,7 @@ pub fn resolve_if(
                                 }
                             }
                         }
-                        Err(e) => return Err(e)
+                        Err(e) => return Err(e),
                     }
                 }
 
@@ -58,6 +49,6 @@ pub fn resolve_if(
 
             Ok(DataTypes::null())
         }
-        Err(e) => Err(e)
+        Err(e) => Err(e),
     }
 }

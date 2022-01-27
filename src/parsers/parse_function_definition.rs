@@ -3,8 +3,8 @@ use crate::core::nodes::Nodes;
 use crate::parsers::parse_delimited::parse_delimited;
 use crate::parsers::parse_id::parse_strict_id;
 use crate::parsers::parse_scope::parse_scope;
-use crate::TokenStream;
 use crate::util::chars::is_id;
+use crate::TokenStream;
 
 pub fn parse_func_def(stream: &mut TokenStream) -> Nodes {
     stream.skip_kw(FUNCTION_DEFINITION);
@@ -19,7 +19,7 @@ pub fn parse_func_def(stream: &mut TokenStream) -> Nodes {
 
     Nodes::FnDef {
         name,
-        params: params.into_iter().map(| n | n.to_kw().clone()).collect(),
-        body: Box::new(scope)
+        params: params.into_iter().map(|n| n.to_kw().clone()).collect(),
+        body: Box::new(scope),
     }
 }

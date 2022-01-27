@@ -17,6 +17,6 @@ pub fn parse_variable(stream: &mut TokenStream) -> Nodes {
 
     Nodes::VariableDef {
         name: name.clone(),
-        value: Box::new(value)
+        value: Box::new(value),
     }
 }

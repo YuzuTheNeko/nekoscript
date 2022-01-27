@@ -1,7 +1,13 @@
 use crate::core::nodes::Nodes;
 use crate::TokenStream;
 
-pub fn parse_delimited<'a>(stream: &mut TokenStream, start: char, stop: char, sep: char, f: &'a dyn Fn(&mut TokenStream) -> Nodes) -> Vec<Nodes> {
+pub fn parse_delimited<'a>(
+    stream: &mut TokenStream,
+    start: char,
+    stop: char,
+    sep: char,
+    f: &'a dyn Fn(&mut TokenStream) -> Nodes,
+) -> Vec<Nodes> {
     let mut vc = vec![];
 
     stream.skip_punc(start);
@@ -18,7 +24,7 @@ pub fn parse_delimited<'a>(stream: &mut TokenStream, start: char, stop: char, se
 
         if stream.is_punc(stop) {
             ended = true;
-            break
+            break;
         }
 
         vc.push(f(stream));

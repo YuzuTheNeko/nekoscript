@@ -1,12 +1,12 @@
-use std::cell::RefCell;
-use std::rc::Rc;
 use crate::core::data_types::DataTypes;
-use crate::core::interpreter::{Interpreter, IReturn};
+use crate::core::interpreter::{IReturn, Interpreter};
 use crate::core::nodes::Nodes;
 use crate::core::return_types::ReturnTypes::RuntimeError;
 use crate::core::scope::Scope;
 use crate::runtime::call_function::call_function;
 use crate::runtime::call_native_fn::call_native_fn;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 pub fn resolve_func_call(itr: &Interpreter, scope: &Scope, node: &Nodes) -> IReturn {
     let (name, args, func) = node.to_fn_c();
@@ -36,7 +36,10 @@ pub fn resolve_func_call(itr: &Interpreter, scope: &Scope, node: &Nodes) -> IRet
                 let writer = scope.variables.read().unwrap();
                 let var = writer.get(&name.to_string());
                 if !var.is_some() {
-                    return Err(RuntimeError(format!("Attempted to call undefined function {}", name)))
+                    return Err(RuntimeError(format!(
+                        "Attempted to call undefined function {}",
+                        name
+                    )));
                 }
                 val = Some(var.unwrap().clone());
             }

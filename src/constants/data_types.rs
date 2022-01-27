@@ -18,5 +18,5 @@ pub const DATA_TYPES: [&str; 6] = [
     ARRAY_TYPE,
     BOOL_TYPE,
     INT_TYPE,
-    NULL_TYPE
+    NULL_TYPE,
 ];

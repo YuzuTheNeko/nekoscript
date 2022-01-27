@@ -23,7 +23,7 @@ pub fn apply_binary(stream: &mut TokenStream, left: Nodes, prec: u8) -> Nodes {
         let bin = Nodes::BinaryExpr {
             left: Box::new(left),
             right: Box::new(right),
-            op: op.clone()
+            op: op.clone(),
         };
 
         apply_binary(stream, bin, prec)

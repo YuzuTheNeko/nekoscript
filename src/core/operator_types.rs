@@ -5,14 +5,14 @@ pub enum OperatorTypes {
     Equals,
     Add,
     Sub,
-    NotEquals
+    NotEquals,
 }
 
 #[derive(Clone)]
 pub enum SpecialOperatorTypes {
     AddAssign,
     SubAssign,
-    Assign
+    Assign,
 }
 
 impl OperatorTypes {
@@ -21,14 +21,14 @@ impl OperatorTypes {
             Self::Equals => EQUALS,
             Self::Sub => SUB,
             Self::Add => ADD,
-            Self::NotEquals => NOT_EQUALS
+            Self::NotEquals => NOT_EQUALS,
         }
     }
 
     pub fn prec(&self) -> u8 {
         match self {
             Self::Equals | Self::NotEquals => 7,
-            Self::Sub | Self::Add => 10
+            Self::Sub | Self::Add => 10,
         }
     }
 }

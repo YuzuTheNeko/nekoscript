@@ -4,7 +4,7 @@ use crate::core::native_function::NativeFunction;
 pub fn log() -> NativeFunction {
     NativeFunction {
         name: String::from("log"),
-        body: Box::new(| scope, args | {
+        body: Box::new(|scope, args| {
             let mut str = String::new();
 
             for i in args.into_iter() {
@@ -16,6 +16,6 @@ pub fn log() -> NativeFunction {
             println!("{}", str);
 
             Ok(DataTypes::null())
-        })
+        }),
     }
 }

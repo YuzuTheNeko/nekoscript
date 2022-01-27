@@ -1,4 +1,3 @@
-
 use crate::core::nodes::Nodes;
 use crate::parsers::parse_delimited::parse_delimited;
 use crate::parsers::parse_expression::parse_expression;
@@ -18,8 +17,8 @@ pub fn parse_call(stream: &mut TokenStream, node: Nodes) -> Nodes {
         let args = parse_delimited(stream, '(', ')', ',', &parse_expression);
         Nodes::DynFnCall {
             params: data.0.clone(),
-            args: args.into_iter().map(| n | Box::new(n)).collect(),
-            body: data.1.clone()
+            args: args.into_iter().map(|n| Box::new(n)).collect(),
+            body: data.1.clone(),
         }
     } else {
         node

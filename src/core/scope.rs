@@ -1,17 +1,17 @@
-use std::cell::RefCell;
-use std::collections::HashMap;
-use std::rc::Rc;
-use std::sync::RwLock;
 use crate::core::data_types::DataTypes;
 use crate::core::native_function::NativeFunction;
 use crate::core::nodes::Nodes;
 use crate::native::loader::load_native_functions;
+use std::cell::RefCell;
+use std::collections::HashMap;
+use std::rc::Rc;
+use std::sync::RwLock;
 
 #[derive(Default)]
 pub struct Scope {
     pub variables: Rc<RwLock<HashMap<String, Rc<RefCell<DataTypes>>>>>,
     pub functions: Rc<RwLock<HashMap<String, Nodes>>>,
-    pub native: Vec<NativeFunction>
+    pub native: Vec<NativeFunction>,
 }
 
 impl Scope {
@@ -27,7 +27,7 @@ impl Scope {
     }
 
     pub fn is_native_fn(&self, key: &String) -> bool {
-        self.native.iter().any(| f | f.name.eq(key))
+        self.native.iter().any(|f| f.name.eq(key))
     }
 
     pub fn is_def_fn(&self, key: &String) -> bool {

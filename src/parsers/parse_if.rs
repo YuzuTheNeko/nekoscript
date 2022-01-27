@@ -35,6 +35,6 @@ pub fn parse_if(stream: &mut TokenStream) -> Nodes {
         condition: Box::new(condition),
         races,
         when_true: Box::new(scope),
-        when_false: els
+        when_false: els,
     }
 }

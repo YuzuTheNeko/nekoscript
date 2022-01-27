@@ -7,7 +7,9 @@ use crate::parsers::parse_number::parse_number;
 use crate::parsers::parse_op::parse_op;
 use crate::parsers::parse_punc::parse_punc;
 use crate::parsers::parse_string::parse_string;
-use crate::util::chars::{is_digit, is_id_start, is_newline, is_op, is_punc, is_quote, is_skippable_char, is_whitespace};
+use crate::util::chars::{
+    is_digit, is_id_start, is_newline, is_op, is_punc, is_quote, is_skippable_char, is_whitespace,
+};
 
 #[derive(Default)]
 pub struct TokenStream<'a> {
@@ -15,7 +17,7 @@ pub struct TokenStream<'a> {
     column: usize,
     line: usize,
 
-    code: &'a[u8],
+    code: &'a [u8],
     pub nodes: Vec<Nodes>,
 }
 
@@ -120,7 +122,11 @@ impl<'a> TokenStream<'a> {
 
     pub fn skip_punc(&mut self, char: char) {
         if !self.is_punc(char) {
-            self.panic(&format!("Unexpected token {}, wanted {}", self.char() as char, char))
+            self.panic(&format!(
+                "Unexpected token {}, wanted {}",
+                self.char() as char,
+                char
+            ))
         }
         self.skip(1)
     }
@@ -135,19 +141,19 @@ impl<'a> TokenStream<'a> {
         let char = self.char();
 
         if char.eq(&0) {
-            return Nodes::Value(DataTypes::null())
+            return Nodes::Value(DataTypes::null());
         }
 
         if is_op(char) {
-            return parse_op(self)
+            return parse_op(self);
         } else if is_id_start(char) {
-            return parse_id(self)
+            return parse_id(self);
         } else if is_digit(char) || self.is_op(SUB) {
-            return parse_number(self)
+            return parse_number(self);
         } else if is_quote(char) {
-            return parse_string(self)
+            return parse_string(self);
         } else if is_punc(char) {
-            return parse_punc(self)
+            return parse_punc(self);
         }
 
         self.panic(&format!("Unexpected token {}", char as char));

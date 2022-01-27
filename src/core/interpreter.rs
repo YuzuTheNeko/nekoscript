@@ -1,5 +1,3 @@
-use std::cell::RefCell;
-use std::rc::Rc;
 use crate::core::data_types::DataTypes;
 use crate::core::nodes::Nodes;
 use crate::core::return_types::ReturnTypes;
@@ -14,12 +12,14 @@ use crate::runtime::resolve_scope::resolve_scope;
 use crate::runtime::resolve_special_assignment::resolve_special_assignment;
 use crate::runtime::resolve_variable::resolve_variable;
 use crate::runtime::resolve_while::resolve_while;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 pub struct Interpreter {
-    pub nodes: Vec<Nodes>
+    pub nodes: Vec<Nodes>,
 }
 
-pub type IReturn= Result<Rc<RefCell<DataTypes>>, ReturnTypes>;
+pub type IReturn = Result<Rc<RefCell<DataTypes>>, ReturnTypes>;
 
 impl Interpreter {
     pub fn run(&self) {
@@ -39,9 +39,7 @@ impl Interpreter {
     }
 
     pub fn new(nodes: Vec<Nodes>) -> Self {
-        Self {
-            nodes
-        }
+        Self { nodes }
     }
 
     pub fn execute(&self, scope: &Scope, node: &Nodes) -> IReturn {
@@ -57,7 +55,7 @@ impl Interpreter {
             Nodes::SpecialAssignment { .. } => resolve_special_assignment(self, scope, node),
             Nodes::Value(value) => Ok(value.clone()),
             Nodes::If { .. } => resolve_if(self, scope, node),
-            _ => Ok(DataTypes::null())
+            _ => Ok(DataTypes::null()),
         }
     }
 }

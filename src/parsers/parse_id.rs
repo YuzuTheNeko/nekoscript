@@ -11,7 +11,7 @@ pub fn parse_id(stream: &mut TokenStream) -> Nodes {
     let got = stream.read_while(&is_id);
 
     if stream.is_punc('(') {
-        return parse_func_usage(stream, Some(got), None)
+        return parse_func_usage(stream, Some(got), None);
     }
 
     Nodes::Keyword(got)

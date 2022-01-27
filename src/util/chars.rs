@@ -1,8 +1,8 @@
-use regex::Regex;
 use crate::constants::characters::{DIGIT_REGEX, ID_REGEX, ID_START_REGEX};
 use crate::constants::keywords::KEYWORDS;
 use crate::constants::operators::{OPERATOR_TYPES, SPECIAL_OPERATOR_TYPES};
 use crate::constants::punctuations::PUNCTUATION_CHARACTERS;
+use regex::Regex;
 
 pub fn is_x(ch: u8, to: char) -> bool {
     ch.eq(&(to as u8))
@@ -21,15 +21,21 @@ pub fn is_carriage_return(ch: u8) -> bool {
 }
 
 pub fn is_digit(ch: u8) -> bool {
-    Regex::new(DIGIT_REGEX).unwrap().is_match(&String::from(ch as char))
+    Regex::new(DIGIT_REGEX)
+        .unwrap()
+        .is_match(&String::from(ch as char))
 }
 
 pub fn is_id_start(ch: u8) -> bool {
-    Regex::new(ID_START_REGEX).unwrap().is_match(&String::from(ch as char))
+    Regex::new(ID_START_REGEX)
+        .unwrap()
+        .is_match(&String::from(ch as char))
 }
 
 pub fn is_id(ch: u8) -> bool {
-    Regex::new(ID_REGEX).unwrap().is_match(&String::from(ch as char))
+    Regex::new(ID_REGEX)
+        .unwrap()
+        .is_match(&String::from(ch as char))
 }
 
 pub fn is_indent(ch: u8) -> bool {

@@ -12,15 +12,15 @@ pub fn resolve_while(itr: &Interpreter, scope: &Scope, node: &Nodes) -> IReturn 
             Ok(val) => {
                 let val = val.borrow();
                 if !val.to_bool().eq(&true) {
-                    break
+                    break;
                 } else {
                     match itr.execute(scope, code) {
                         Err(e) => return Err(e),
                         _ => {}
                     }
                 }
-            },
-            Err(e) => return Err(e)
+            }
+            Err(e) => return Err(e),
         }
     }
 

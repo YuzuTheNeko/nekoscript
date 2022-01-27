@@ -1,10 +1,10 @@
-use std::ops::{Add, AddAssign, Rem, RemAssign, Sub};
 use crate::core::data_types::DataTypes;
-use crate::core::interpreter::{Interpreter, IReturn};
+use crate::core::interpreter::{IReturn, Interpreter};
 use crate::core::nodes::Nodes;
 use crate::core::operator_types::SpecialOperatorTypes;
 use crate::core::return_types::ReturnTypes;
 use crate::core::scope::Scope;
+use std::ops::{Add, AddAssign, Rem, RemAssign, Sub};
 
 pub fn resolve_special_assignment(itr: &Interpreter, scope: &Scope, node: &Nodes) -> IReturn {
     let (op, key, val) = node.to_special_assignment();
@@ -15,7 +15,10 @@ pub fn resolve_special_assignment(itr: &Interpreter, scope: &Scope, node: &Nodes
             let mut var = var.get(key);
 
             match var {
-                None => Err(ReturnTypes::RuntimeError(format!("Attempted to read unexisting variable {}", key))),
+                None => Err(ReturnTypes::RuntimeError(format!(
+                    "Attempted to read unexisting variable {}",
+                    key
+                ))),
                 Some(mut var) => {
                     let mut v = var.borrow_mut();
                     let v = &mut *v;
@@ -39,7 +42,7 @@ pub fn resolve_special_assignment(itr: &Interpreter, scope: &Scope, node: &Nodes
                     }
                 }
             }
-        },
-        Err(e) => Err(e)
+        }
+        Err(e) => Err(e),
     }
 }

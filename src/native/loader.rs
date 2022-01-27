@@ -4,9 +4,5 @@ use crate::native::log::log;
 use crate::native::system_time::system_time;
 
 pub fn load_native_functions() -> Vec<NativeFunction> {
-    vec![
-        log(),
-        _typeof(),
-        system_time()
-    ]
+    vec![log(), _typeof(), system_time()]
 }

@@ -1,5 +1,5 @@
-pub mod data_types;
-pub mod operators;
 pub mod characters;
-pub mod punctuations;
+pub mod data_types;
 pub mod keywords;
+pub mod operators;
+pub mod punctuations;

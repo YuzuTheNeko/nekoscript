@@ -1,13 +1,6 @@
-use crate::core::data_types::DataTypes;
-use crate::core::scope::Scope;
-
-pub fn across(data: &DataTypes) -> &DataTypes {
-    data
-}
-
+#[test]
 pub fn test() {
-    let scope = Scope::new();
+    let uwu = "okw";
 
-    let d = scope.variables.read().unwrap();
-
+    assert_eq!(format!("{uwu}"), uwu)
 }

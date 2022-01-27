@@ -3,8 +3,8 @@ use crate::core::nodes::Nodes;
 use crate::core::operator_types::SpecialOperatorTypes;
 use crate::parsers::parse_expression::parse_expression;
 use crate::parsers::parse_op::parse_op;
-use crate::TokenStream;
 use crate::util::chars::is_op;
+use crate::TokenStream;
 
 pub fn parse_special_op(stream: &mut TokenStream, kw: String) -> Nodes {
     let op = stream.read_while(&is_op);
@@ -25,6 +25,6 @@ pub fn parse_special_op(stream: &mut TokenStream, kw: String) -> Nodes {
             }
         },
         keyword: kw,
-        value: Box::new(expr)
+        value: Box::new(expr),
     }
 }

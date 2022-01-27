@@ -13,6 +13,6 @@ pub fn parse_while(stream: &mut TokenStream) -> Nodes {
 
     Nodes::While {
         condition: Box::new(condition),
-        scope: Box::new(scope)
+        scope: Box::new(scope),
     }
 }

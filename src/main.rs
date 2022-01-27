@@ -1,19 +1,19 @@
 #![allow(dead_code)]
 #![allow(unused)]
 
+use crate::core::interpreter::Interpreter;
+use crate::core::token_stream::TokenStream;
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
-use crate::core::interpreter::Interpreter;
-use crate::core::token_stream::TokenStream;
 
-mod core;
 mod constants;
-mod tests;
-mod util;
+mod core;
 mod native;
 mod parsers;
 mod runtime;
+mod tests;
+mod util;
 
 fn main() {
     let path = Path::new("C:\\Users\\user\\Desktop\\projects\\nekoscript\\tests\\example.nksc");
