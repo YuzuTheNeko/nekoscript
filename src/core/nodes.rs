@@ -44,6 +44,7 @@ pub enum Nodes {
         body: Box<Nodes>,
         args: Vec<Box<Nodes>>,
     },
+    Return(Box<Nodes>),
     While {
         condition: Box<Nodes>,
         scope: Box<Nodes>,
@@ -98,6 +99,7 @@ impl Nodes {
             Nodes::BinaryExpr { .. } => "BinExpr",
             Nodes::Scope(_) => "Scope",
             Nodes::Value(_) => "Value",
+            Nodes::Return(_) => "Return",
             Nodes::FnCall { .. } => "FnCall",
             Nodes::SpecialAssignment { .. } => "SpecialAssigment",
             Nodes::While { .. } => WHILE_KEYWORD,
@@ -114,6 +116,13 @@ impl Nodes {
         match self {
             Nodes::Operator(op) => op,
             _ => panic!("Node not an operator."),
+        }
+    }
+
+    pub fn to_return(&self) -> &Box<Nodes> {
+        match self {
+            Nodes::Return(v) => v,
+            _ => panic!("Node not return")
         }
     }
 

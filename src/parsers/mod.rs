@@ -17,3 +17,6 @@ pub mod parse_special_operator;
 pub mod parse_string;
 pub mod parse_variable;
 pub mod parse_while;
+pub mod parse_object;
+pub mod parse_array;
+pub mod parse_return;

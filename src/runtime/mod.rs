@@ -11,3 +11,4 @@ pub mod resolve_scope;
 pub mod resolve_special_assignment;
 pub mod resolve_variable;
 pub mod resolve_while;
+pub mod resolve_return;

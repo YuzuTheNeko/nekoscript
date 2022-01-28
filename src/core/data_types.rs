@@ -18,12 +18,12 @@ pub enum DataTypes {
     },
     Bool(bool),
     Null,
-    Object(Rc<RwLock<HashMap<String, DataTypes>>>),
-    Array(Rc<RwLock<Vec<DataTypes>>>),
+    Object(Rc<RwLock<HashMap<String, Nodes>>>),
+    Array(Rc<RwLock<Vec<Nodes>>>),
 }
 
 impl DataTypes {
-    pub fn to_array(&self) -> &Rc<RwLock<Vec<DataTypes>>> {
+    pub fn to_array(&self) -> &Rc<RwLock<Vec<Nodes>>> {
         match self {
             DataTypes::Array(v) => v,
             _ => panic!("Value is not array"),
@@ -72,7 +72,7 @@ impl DataTypes {
         }
     }
 
-    pub fn to_object(&self) -> &Rc<RwLock<HashMap<String, DataTypes>>> {
+    pub fn to_object(&self) -> &Rc<RwLock<HashMap<String, Nodes>>> {
         match self {
             DataTypes::Object(v) => v,
             _ => panic!("Value is not object"),

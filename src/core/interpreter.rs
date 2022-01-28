@@ -14,6 +14,7 @@ use crate::runtime::resolve_variable::resolve_variable;
 use crate::runtime::resolve_while::resolve_while;
 use std::cell::RefCell;
 use std::rc::Rc;
+use crate::runtime::resolve_return::resolve_return;
 
 pub struct Interpreter {
     pub nodes: Vec<Nodes>,
@@ -44,6 +45,7 @@ impl Interpreter {
 
     pub fn execute(&self, scope: &Scope, node: &Nodes) -> IReturn {
         match node {
+            Nodes::Return(_) => resolve_return(self, scope, node),
             Nodes::DynFnCall { .. } => resolve_dyn_call(self, scope, node),
             Nodes::VariableDef { .. } => resolve_variable(self, scope, node),
             Nodes::FnCall { .. } => resolve_func_call(self, scope, node),

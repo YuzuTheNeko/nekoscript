@@ -1,6 +1,7 @@
 use crate::constants::operators::SUB;
 use crate::core::data_types::DataTypes;
 use crate::core::nodes::Nodes;
+use crate::parsers::parse_array::parse_array;
 use crate::parsers::parse_expression::parse_expression;
 use crate::parsers::parse_id::parse_id;
 use crate::parsers::parse_number::parse_number;
@@ -146,6 +147,8 @@ impl<'a> TokenStream<'a> {
 
         if is_op(char) {
             return parse_op(self);
+        } else if char.eq(&b'[') {
+            return parse_array(self);
         } else if is_id_start(char) {
             return parse_id(self);
         } else if is_digit(char) || self.is_op(SUB) {
