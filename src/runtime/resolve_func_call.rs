@@ -1,6 +1,6 @@
 use crate::core::data_types::DataTypes;
 use crate::core::interpreter::{IReturn, Interpreter};
-use crate::core::nodes::Nodes;
+use crate::core::nodes::{Node, Nodes};
 use crate::core::return_types::ReturnTypes::RuntimeError;
 use crate::core::scope::Scope;
 use crate::runtime::call_function::call_function;
@@ -8,13 +8,13 @@ use crate::runtime::call_native_fn::call_native_fn;
 use std::cell::RefCell;
 use std::rc::Rc;
 
-pub fn resolve_func_call(itr: &Interpreter, scope: &Scope, node: &Nodes) -> IReturn {
-    let (name, args, func) = node.to_fn_c();
+pub fn resolve_func_call(itr: &Interpreter, scope: &Scope, node: &Node) -> IReturn {
+    let (name, args, func) = node.value.to_fn_c();
 
     if name.is_some() {
         let name = name.as_ref().unwrap();
         if scope.is_def_fn(&name) {
-            let mut node: Option<Nodes> = None;
+            let mut node: Option<Node> = None;
 
             {
                 let reader = scope.functions.read().unwrap();
@@ -24,7 +24,7 @@ pub fn resolve_func_call(itr: &Interpreter, scope: &Scope, node: &Nodes) -> IRet
 
             let node = node.unwrap();
 
-            let (name, params, body) = node.to_fn_def();
+            let (name, params, body) = node.value.to_fn_def();
 
             call_function(itr, scope, args, params, body)
         } else if scope.is_native_fn(&name) {

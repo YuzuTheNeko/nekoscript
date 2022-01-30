@@ -1,11 +1,11 @@
 
 use crate::core::interpreter::IReturn;
-use crate::core::nodes::Nodes;
+use crate::core::nodes::{Node, Nodes};
 use crate::core::scope::Scope;
 use crate::Interpreter;
 
-pub fn resolve_ternary(itr: &Interpreter, scope: &Scope, node: &Nodes) -> IReturn {
-    let (condition, when1, when2) = node.to_ternary();
+pub fn resolve_ternary(itr: &Interpreter, scope: &Scope, node: &Node) -> IReturn {
+    let (condition, when1, when2) = node.value.to_ternary();
 
     match itr.execute(scope, condition) {
         Ok(val) => {

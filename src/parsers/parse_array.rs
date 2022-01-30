@@ -2,11 +2,13 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use std::sync::RwLock;
 use crate::core::data_types::DataTypes;
-use crate::core::nodes::Nodes;
+use crate::core::nodes::{Node, Nodes};
 use crate::parsers::parse_expression::parse_expression;
 use crate::TokenStream;
 
-pub fn parse_array(stream: &mut TokenStream) -> Nodes {
+pub fn parse_array(stream: &mut TokenStream) -> Node {
+    let pos = stream.pos();
+
     stream.skip_punc('[');
 
     let mut vc = vec![];
@@ -20,5 +22,8 @@ pub fn parse_array(stream: &mut TokenStream) -> Nodes {
 
     stream.skip_punc(']');
 
-    Nodes::Value(Rc::new(RefCell::new(DataTypes::Array(Rc::new(RwLock::new(vc))))))
+    Nodes::create(
+        Nodes::Value(Rc::new(RefCell::new(DataTypes::Array(Rc::new(RwLock::new(vc)))))),
+        pos
+    )
 }

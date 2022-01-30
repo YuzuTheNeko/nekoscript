@@ -1,7 +1,7 @@
 use crate::constants::data_types::{
     ARRAY_TYPE, BOOL_TYPE, FN_TYPE, INT_TYPE, NULL_TYPE, OBJECT_TYPE, TEXT_TYPE,
 };
-use crate::core::nodes::Nodes;
+use crate::core::nodes::{Node, Nodes};
 use std::borrow::Borrow;
 use std::cell::{RefCell, RefMut};
 use std::collections::HashMap;
@@ -14,23 +14,23 @@ pub enum DataTypes {
     Int(i64),
     Fn {
         params: Vec<String>,
-        body: Box<Nodes>,
+        body: Box<Node>,
     },
     Bool(bool),
     Null,
-    Object(Rc<RwLock<HashMap<String, Nodes>>>),
-    Array(Rc<RwLock<Vec<Nodes>>>),
+    Object(Rc<RwLock<HashMap<String, Node>>>),
+    Array(Rc<RwLock<Vec<Node>>>),
 }
 
 impl DataTypes {
-    pub fn to_array(&self) -> &Rc<RwLock<Vec<Nodes>>> {
+    pub fn to_array(&self) -> &Rc<RwLock<Vec<Node>>> {
         match self {
             DataTypes::Array(v) => v,
             _ => panic!("Value is not array"),
         }
     }
 
-    pub fn to_dyn_fn(&self) -> (&Vec<String>, &Box<Nodes>) {
+    pub fn to_dyn_fn(&self) -> (&Vec<String>, &Box<Node>) {
         match self {
             DataTypes::Fn { params, body } => (params, body),
             _ => panic!("Node not dyn fn"),
@@ -44,7 +44,7 @@ impl DataTypes {
         }
     }
 
-    pub fn to_obj(&self) -> &Rc<RwLock<HashMap<String, Nodes>>> {
+    pub fn to_obj(&self) -> &Rc<RwLock<HashMap<String, Node>>> {
         match self {
             DataTypes::Object(b) => b,
             _ => panic!("Value is not object")
@@ -79,7 +79,7 @@ impl DataTypes {
         }
     }
 
-    pub fn to_object(&self) -> &Rc<RwLock<HashMap<String, Nodes>>> {
+    pub fn to_object(&self) -> &Rc<RwLock<HashMap<String, Node>>> {
         self.to_obj()
     }
 }

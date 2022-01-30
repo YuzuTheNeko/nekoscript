@@ -4,17 +4,19 @@ use std::rc::Rc;
 use std::sync::RwLock;
 use crate::constants::keywords::OBJECT_KEYWORD;
 use crate::core::data_types::DataTypes;
-use crate::core::nodes::Nodes;
+use crate::core::nodes::{Node, Nodes};
 use crate::parsers::parse_expression::parse_expression;
 use crate::TokenStream;
 use crate::util::chars::is_id;
 
-pub fn parse_object(stream: &mut TokenStream) -> Nodes {
+pub fn parse_object(stream: &mut TokenStream) -> Node {
+    let pos = stream.pos();
+
     stream.skip_kw(OBJECT_KEYWORD);
 
     stream.skip_punc('{');
 
-    let mut hash: HashMap<String, Nodes> = HashMap::new();
+    let mut hash: HashMap<String, Node> = HashMap::new();
 
     while !stream.is_punc('}') {
         let name = stream.read_while(&is_id);
@@ -32,5 +34,8 @@ pub fn parse_object(stream: &mut TokenStream) -> Nodes {
 
     stream.skip_punc('}');
 
-    Nodes::Value(Rc::new(RefCell::new(DataTypes::Object(Rc::new(RwLock::new(hash))))))
+    Nodes::create(
+        Nodes::Value(Rc::new(RefCell::new(DataTypes::Object(Rc::new(RwLock::new(hash)))))),
+        pos
+    )
 }

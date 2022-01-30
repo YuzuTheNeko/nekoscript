@@ -3,14 +3,14 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use crate::core::data_types::DataTypes;
 use crate::core::interpreter::IReturn;
-use crate::core::nodes::{Accessor, Nodes};
+use crate::core::nodes::{Accessor, Node, Nodes, Position};
 use crate::core::return_types::ReturnTypes::RuntimeError;
 use crate::core::scope::Scope;
 use crate::Interpreter;
 use crate::runtime::call_function::call_function;
 
-pub fn resolve_object_accessor(itr: &Interpreter, scope: &Scope, node: &Nodes) -> IReturn {
-    let node = node.to_obj_accessor();
+pub fn resolve_object_accessor(itr: &Interpreter, scope: &Scope, old: &Node) -> IReturn {
+    let node = old.value.to_obj_accessor();
 
     match itr.execute(scope, node.0) {
         Ok(mut val) => {
@@ -29,7 +29,7 @@ pub fn resolve_object_accessor(itr: &Interpreter, scope: &Scope, node: &Nodes) -
 
                         if !borrow.contains_key(name) {
                             let dt = DataTypes::null();
-                            borrow.insert(name.to_string(), Nodes::Value(dt.clone()));
+                            borrow.insert(name.to_string(), Nodes::create(Nodes::Value(dt.clone()), Position::default()));
                             return Ok(dt)
                         }
 
@@ -67,7 +67,7 @@ pub fn resolve_object_accessor(itr: &Interpreter, scope: &Scope, node: &Nodes) -
 
                                 let data = res.to_dyn_fn();
 
-                                let mut vc: Vec<Box<Nodes>> = vec![];
+                                let mut vc: Vec<Box<Node>> = vec![];
 
                                 for i in params {
                                     vc.push(Box::new(i.clone()))

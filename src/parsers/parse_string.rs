@@ -1,11 +1,13 @@
 use crate::core::data_types::DataTypes;
-use crate::core::nodes::Nodes;
+use crate::core::nodes::{Node, Nodes};
 use crate::core::token_stream::TokenStream;
 use crate::util::chars::is_quote;
 use std::cell::RefCell;
 use std::rc::Rc;
 
-pub fn parse_string(stream: &mut TokenStream) -> Nodes {
+pub fn parse_string(stream: &mut TokenStream) -> Node {
+    let pos = stream.pos();
+
     stream.skip_punc('"');
 
     let str = stream.read_while(&|u| !is_quote(u));
@@ -17,5 +19,8 @@ pub fn parse_string(stream: &mut TokenStream) -> Nodes {
 
     stream.skip_punc('"');
 
-    Nodes::Value(Rc::new(RefCell::new(DataTypes::Text(str))))
+    Nodes::create(
+        Nodes::Value(Rc::new(RefCell::new(DataTypes::Text(str)))),
+        pos
+    )
 }

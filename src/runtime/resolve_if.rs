@@ -1,11 +1,11 @@
 use crate::core::data_types::DataTypes;
 use crate::core::interpreter::IReturn;
-use crate::core::nodes::Nodes;
+use crate::core::nodes::{Node, Nodes};
 use crate::core::scope::Scope;
 use crate::Interpreter;
 
-pub fn resolve_if(itr: &Interpreter, scope: &Scope, node: &Nodes) -> IReturn {
-    let (condition, when_true, when_false, races) = node.to_if();
+pub fn resolve_if(itr: &Interpreter, scope: &Scope, node: &Node) -> IReturn {
+    let (condition, when_true, when_false, races) = node.value.to_if();
 
     match itr.execute(scope, condition) {
         Ok(val) => {

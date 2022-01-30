@@ -1,6 +1,6 @@
 use crate::constants::operators::SUB;
 use crate::core::data_types::DataTypes;
-use crate::core::nodes::Nodes;
+use crate::core::nodes::{Node, Nodes, Position};
 use crate::parsers::parse_array::parse_array;
 use crate::parsers::parse_expression::parse_expression;
 use crate::parsers::parse_id::parse_id;
@@ -18,22 +18,29 @@ pub struct TokenStream<'a> {
     column: usize,
     line: usize,
 
+    path: String,
+
     code: &'a [u8],
-    pub nodes: Vec<Nodes>,
+    pub nodes: Vec<Node>,
 }
 
 pub type ReaderFn<'a> = &'a dyn Fn(u8) -> bool;
 
 impl<'a> TokenStream<'a> {
-    pub fn new(str: &'a str) -> Self {
+    pub fn new(str: &'a str, path: String) -> Self {
         Self {
             line: 1,
             code: str.as_bytes(),
+            path,
             ..Self::default()
         }
     }
 
     pub fn skip_useless(&mut self) -> String {
+        if !is_skippable_char(self.char()) {
+            return String::new()
+        }
+
         self.read_while(&is_skippable_char)
     }
 
@@ -78,7 +85,8 @@ impl<'a> TokenStream<'a> {
     }
 
     pub fn panic(&self, str: &str) {
-        panic!("{} at {}:{}", &str, self.line, self.column)
+        println!("{} at {}:{}", &str, self.line, self.column);
+        std::process::exit(0);
     }
 
     pub fn at(&self, offset: usize) -> u8 {
@@ -94,9 +102,18 @@ impl<'a> TokenStream<'a> {
         self.current == self.code.len()
     }
 
-    pub fn peek(&mut self) -> Nodes {
+    pub fn pos(&mut self) -> Position {
+        self.skip_useless();
+
+        Position {
+            line: self.line,
+            column: self.column
+        }
+    }
+
+    pub fn peek(&mut self) -> Node {
         if self.eof() {
-            Nodes::Value(DataTypes::null())
+            Nodes::create(Nodes::Value(DataTypes::null()), self.pos())
         } else {
             let oldc = self.current.clone();
             let oldcl = self.column.clone();
@@ -136,13 +153,13 @@ impl<'a> TokenStream<'a> {
         self.skip_kw(&op)
     }
 
-    pub fn read_next(&mut self) -> Nodes {
+    pub fn read_next(&mut self) -> Node {
         self.skip_useless();
 
         let char = self.char();
 
         if char.eq(&0) {
-            return Nodes::Value(DataTypes::null());
+            return Nodes::create(Nodes::Value(DataTypes::null()), self.pos());
         }
 
         if is_op(char) {

@@ -1,8 +1,14 @@
-define uwu(x) {
-    neko l = 70;
-    log(x, l);
+neko x = 0;
+
+define uwu() {
+    x += 1;
+    log(x);
+    if (x == 5) {
+        return x;
+    };
+    return uwu();
 };
 
-uwu(10);
-
-log(l);
+log((dyn() {
+    return 5;
+})() == 5);

@@ -1,11 +1,11 @@
 use crate::core::data_types::DataTypes;
 use crate::core::interpreter::IReturn;
-use crate::core::nodes::Nodes;
+use crate::core::nodes::{Node, Nodes};
 use crate::core::scope::Scope;
 use crate::Interpreter;
 
-pub fn resolve_while(itr: &Interpreter, scope: &Scope, node: &Nodes) -> IReturn {
-    let (condition, code) = node.to_while();
+pub fn resolve_while(itr: &Interpreter, scope: &Scope, node: &Node) -> IReturn {
+    let (condition, code) = node.value.to_while();
 
     loop {
         match itr.execute(scope, condition) {

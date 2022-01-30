@@ -1,6 +1,6 @@
 use crate::core::data_types::DataTypes;
 use crate::core::native_function::NativeFunction;
-use crate::core::nodes::Nodes;
+use crate::core::nodes::{Node, Nodes};
 use crate::native::loader::load_native_functions;
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -10,7 +10,7 @@ use std::sync::RwLock;
 #[derive(Default)]
 pub struct Scope {
     pub variables: Rc<RwLock<HashMap<String, Rc<RefCell<DataTypes>>>>>,
-    pub functions: Rc<RwLock<HashMap<String, Nodes>>>,
+    pub functions: Rc<RwLock<HashMap<String, Node>>>,
     pub native: Vec<NativeFunction>,
 }
 

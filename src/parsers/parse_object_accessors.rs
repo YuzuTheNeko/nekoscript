@@ -1,10 +1,12 @@
-use crate::core::nodes::{Accessor, Nodes};
+use crate::core::nodes::{Accessor, Node, Nodes};
 use crate::parsers::parse_delimited::parse_delimited;
 use crate::parsers::parse_expression::parse_expression;
 use crate::TokenStream;
 use crate::util::chars::is_id;
 
-pub fn parse_object_accessors(stream: &mut TokenStream, left: Nodes) -> Nodes {
+pub fn parse_object_accessors(stream: &mut TokenStream, left: Node) -> Node {
+    let pos = stream.pos();
+
     let mut accessors = vec![];
 
     while stream.is_kw("->") {
@@ -20,8 +22,11 @@ pub fn parse_object_accessors(stream: &mut TokenStream, left: Nodes) -> Nodes {
         }
     }
 
-    Nodes::ObjectAccessor {
-        value: Box::new(left),
-        accessors
-    }
+    Nodes::create(
+        Nodes::ObjectAccessor {
+            value: Box::new(left),
+            accessors
+        },
+        pos
+    )
 }

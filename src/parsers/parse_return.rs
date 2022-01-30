@@ -1,10 +1,15 @@
 use crate::constants::keywords::RETURN_KEYWORD;
-use crate::core::nodes::Nodes;
+use crate::core::nodes::{Node, Nodes};
 use crate::parsers::parse_expression::parse_expression;
 use crate::TokenStream;
 
-pub fn parse_return(stream: &mut TokenStream) -> Nodes {
+pub fn parse_return(stream: &mut TokenStream) -> Node {
+    let pos = stream.pos();
+
     stream.skip_kw(RETURN_KEYWORD);
 
-    Nodes::Return(Box::new(parse_expression(stream)))
+    Nodes::create(
+        Nodes::Return(Box::new(parse_expression(stream))),
+        pos
+    )
 }

@@ -1,5 +1,5 @@
 use crate::core::data_types::DataTypes;
-use crate::core::nodes::Nodes;
+use crate::core::nodes::{Node, Nodes};
 use crate::core::return_types::ReturnTypes;
 use crate::core::scope::Scope;
 use crate::runtime::resolve_binary::resolve_binary;
@@ -18,7 +18,7 @@ use crate::runtime::resolve_return::resolve_return;
 use crate::runtime::resolve_ternary::resolve_ternary;
 
 pub struct Interpreter {
-    pub nodes: Vec<Nodes>,
+    pub nodes: Vec<Node>,
 }
 
 pub type IReturn = Result<Rc<RefCell<DataTypes>>, ReturnTypes>;
@@ -28,7 +28,7 @@ impl Interpreter {
         let scope = Scope::new();
 
         for node in self.nodes.iter() {
-            match self.execute(&scope, &Box::new(node)) {
+            match self.execute(&scope, node) {
                 Err(err) => match err {
                     ReturnTypes::RuntimeError(str) => {
                         panic!("{}", str);
@@ -40,12 +40,12 @@ impl Interpreter {
         }
     }
 
-    pub fn new(nodes: Vec<Nodes>) -> Self {
+    pub fn new(nodes: Vec<Node>) -> Self {
         Self { nodes }
     }
 
-    pub fn execute(&self, scope: &Scope, node: &Nodes) -> IReturn {
-        match node {
+    pub fn execute(&self, scope: &Scope, node: &Node) -> IReturn {
+        match &node.value {
             Nodes::ObjectAccessor { .. } => resolve_object_accessor(self, scope, node),
             Nodes::Return(_) => resolve_return(self, scope, node),
             Nodes::DynFnCall { .. } => resolve_dyn_call(self, scope, node),

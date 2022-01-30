@@ -1,6 +1,6 @@
 use crate::core::data_types::DataTypes;
 use crate::core::interpreter::IReturn;
-use crate::core::nodes::Nodes;
+use crate::core::nodes::{Node, Nodes};
 use crate::core::return_types::ReturnTypes;
 use crate::core::return_types::ReturnTypes::RuntimeError;
 use crate::core::scope::Scope;
@@ -13,9 +13,9 @@ use std::sync::RwLockWriteGuard;
 pub fn call_function(
     itr: &Interpreter,
     scope: &Scope,
-    args: &Vec<Box<Nodes>>,
+    args: &Vec<Box<Node>>,
     params: &Vec<String>,
-    body: &Box<Nodes>,
+    body: &Box<Node>,
 ) -> IReturn {
     let mut y = 0;
 
@@ -23,7 +23,7 @@ pub fn call_function(
         let mut writer = scope.variables.write().unwrap();
 
         for i in params {
-            let arg: Option<&Box<Nodes>> = args.get(y);
+            let arg: Option<&Box<Node>> = args.get(y);
 
             if !arg.is_some() {
                 return Err(RuntimeError("Function is missing parameters.".to_owned()));
