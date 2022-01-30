@@ -4,14 +4,9 @@ neko ok = [
     dyn() {
         return 109;
     }(),
-    yes,
-    [
-        "depends"
-    ]
+    yes
 ];
 
-log(
-    ok->at(2)->at(0),
-    ok->at(0),
-    ok->at(1)
-);
+ok->set(1, "lmao");
+ok->set(2, yes);
+log(ok->at(2));
