@@ -7,8 +7,10 @@ use crate::Interpreter;
 pub fn resolve_scope(itr: &Interpreter, scope: &Scope, node: &Nodes) -> IReturn {
     let n = node.to_scope();
 
+    let scope = Scope::from(scope);
+
     for i in n.iter() {
-        match itr.execute(scope, i) {
+        match itr.execute(&scope, i) {
             Err(e) => return Err(e),
             _ => {}
         }

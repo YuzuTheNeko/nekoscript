@@ -1,9 +1,8 @@
-neko data = object!{
-    uwu: 110
+define uwu(x) {
+    neko l = 70;
+    log(x, l);
 };
 
-neko ok = 1;
+uwu(10);
 
-data->k = 1;
-
-log(data->k == 1 ? "yes": "no");
+log(l);

@@ -37,4 +37,24 @@ impl Scope {
     pub fn has(&self, key: String, value: &DataTypes) -> bool {
         self.variables.read().unwrap().contains_key(&key)
     }
+
+    pub fn from(scope: &Scope) -> Self {
+        let mut sc = Self::new();
+
+        {
+            let mut writer = sc.variables.write().unwrap();
+            for i in scope.variables.read().unwrap().iter() {
+                writer.insert(i.0.to_string(), i.1.clone());
+            }
+        }
+
+        {
+            let mut writer = sc.functions.write().unwrap();
+            for i in scope.functions.read().unwrap().iter() {
+                writer.insert(i.0.to_string(), i.1.clone());
+            }
+        }
+
+        sc
+    }
 }
