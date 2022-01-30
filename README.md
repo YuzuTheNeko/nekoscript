@@ -43,9 +43,8 @@ neko arr = [
 ];
 
 log(arr->at(0)); @ Will print uwu
+log(arr); @ Gibberish
 ```
-I forgot, do not try to log objects or arrays, these cannot be deserialized to strings *yet*.
-
 There is only one kind of loop implemented, that is `while` loop:
 ```
 neko x = 0;

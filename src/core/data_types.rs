@@ -1,6 +1,6 @@
 use crate::constants::data_types::{ARRAY_TYPE, BOOL_TYPE, FN_TYPE, INT_TYPE, NULL_TYPE, OBJECT_TYPE, RAW_ARRAY_TYPE, RAW_OBJECT_TYPE, TEXT_TYPE};
 use crate::core::nodes::{Node, Nodes};
-use std::borrow::Borrow;
+
 use std::cell::{RefCell, RefMut};
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -183,6 +183,70 @@ impl DataTypes {
             Self::Int(s) => s.to_string(),
             Self::Bool(s) => s.to_string(),
             Self::Null => NULL_TYPE.to_string(),
+            Self::Array(arr) => {
+                let arr = arr.read().unwrap();
+
+                let mut s = String::from('[');
+
+                let mut y = 0;
+                let last = arr.len();
+
+                for i in arr.iter() {
+                    let val = i.borrow();
+                    s.push_str(&format!("{}{}", {
+                        if val.is_text() {
+                            format!("\"{}\"", val.to_string())
+                        } else {
+                            val.to_string()
+                        }
+                    }, {
+                        if y + 1 == last {
+                            String::new()
+                        } else {
+                            String::from(",")
+                        }
+                    }));
+
+                    y += 1;
+                }
+
+                s.push(']');
+
+                s
+            }
+            Self::Object(obj) => {
+                let reader = obj.read().unwrap();
+                let mut s = String::from('{');
+
+                let last = reader.len();
+
+                let mut y = 0;
+
+                for (key, value) in reader.iter() {
+                    let value = value.borrow();
+                    let str = value.to_string();
+
+                    s.push_str(&format!("\"{}\":{}{}", key, {
+                        if value.is_text() {
+                            format!("\"{}\"", str)
+                        } else {
+                            str
+                        }
+                    }, {
+                        if y + 1 == last {
+                            String::new()
+                        } else {
+                            String::from(",")
+                        }
+                    }));
+
+                    y += 1;
+                }
+
+                s.push('}');
+
+                s
+            }
             _ => panic!("Cannot deserialize {} to string.", self.kind()),
         }
     }
