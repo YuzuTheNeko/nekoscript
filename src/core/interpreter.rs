@@ -26,11 +26,15 @@ pub struct Interpreter {
 pub type IReturn = Result<Rc<RefCell<DataTypes>>, ReturnTypes>;
 
 impl Interpreter {
-    pub fn run(&self) {
-        let scope = Scope::new();
+    pub fn run(&self, scope: Option<&Scope>) {
+        if !scope.is_some() {
+            return self.run(Some(&Scope::new()))
+        }
+
+        let scope = scope.unwrap();
 
         for node in self.nodes.iter() {
-            match self.execute(&scope, node) {
+            match self.execute(scope, node) {
                 Err(err) => match err {
                     ReturnTypes::RuntimeError(str) => {
                         println!("RuntimeError: {}\nFile: {}", str, self.path);

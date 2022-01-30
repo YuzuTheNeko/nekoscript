@@ -1,0 +1,4 @@
+public->join = dyn (x, y) {
+    @ tmr
+    return x + " " + y;
+};

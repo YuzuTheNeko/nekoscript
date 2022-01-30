@@ -166,7 +166,7 @@ impl<'a> TokenStream<'a> {
 
         if is_comment(char) {
             self.skip_comment();
-            return self.read_next()
+            return parse_expression(self)
         } else if is_op(char) {
             return parse_op(self);
         } else if char.eq(&b'[') {

@@ -1,0 +1,3 @@
+neko util = load_file("./tests/util.neko");
+
+log(util->join("me", "this")); @ Outputs "me this"
