@@ -2,7 +2,7 @@ use crate::core::data_types::DataTypes;
 use crate::core::interpreter::IReturn;
 use crate::core::operator_types::OperatorTypes;
 use std::cell::RefCell;
-use std::ops::{Add, Sub};
+use std::ops::{Add, Div, Mul, Sub};
 use std::rc::Rc;
 
 pub fn apply_bin(
@@ -41,6 +41,12 @@ pub fn apply_bin(
                 )))
             }
         }
+        OperatorTypes::Multi => Ok(DataTypes::wrap(DataTypes::Int(
+            lhs.to_int().mul(rhs.to_int())
+        ))),
+        OperatorTypes::Div => Ok(DataTypes::wrap(DataTypes::Int(
+            lhs.to_int().div(rhs.to_int())
+        ))),
         OperatorTypes::Sub => Ok(DataTypes::wrap(DataTypes::Int(
             lhs.to_int().sub(rhs.to_int()),
         ))),

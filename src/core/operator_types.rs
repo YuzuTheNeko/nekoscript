@@ -1,4 +1,4 @@
-use crate::constants::operators::{ADD, ASSIGN, EQUALS, NOT_EQUALS, SUB, SUB_EQUAL, SUM_EQUAL};
+use crate::constants::operators::{ADD, ASSIGN, DIV, EQUALS, MULTI, NOT_EQUALS, SUB, SUB_EQUAL, SUM_EQUAL};
 
 #[derive(Clone)]
 pub enum OperatorTypes {
@@ -7,6 +7,8 @@ pub enum OperatorTypes {
     Sub,
     Assign,
     SubAssign,
+    Multi,
+    Div,
     AddAssign,
     NotEquals,
 }
@@ -14,6 +16,8 @@ pub enum OperatorTypes {
 impl OperatorTypes {
     pub fn to_string(&self) -> &str {
         match self {
+            Self::Div => DIV,
+            Self::Multi => MULTI,
             Self::SubAssign => SUB_EQUAL,
             Self::AddAssign => SUM_EQUAL,
             Self::Assign => ASSIGN,
@@ -29,6 +33,7 @@ impl OperatorTypes {
             Self::AddAssign | Self::Assign | Self::SubAssign => 1,
             Self::Equals | Self::NotEquals => 7,
             Self::Sub | Self::Add => 10,
+            Self::Multi | Self::Div => 20
         }
     }
 }
