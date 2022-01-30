@@ -1,6 +1,6 @@
 use crate::constants::characters::{DIGIT_REGEX, ID_REGEX, ID_START_REGEX};
 use crate::constants::keywords::KEYWORDS;
-use crate::constants::operators::{OPERATOR_TYPES};
+use crate::constants::operators::{OPERATOR_TYPES, TERNARY_OPERATOR};
 use crate::constants::punctuations::PUNCTUATION_CHARACTERS;
 use regex::Regex;
 
@@ -18,6 +18,10 @@ pub fn is_newline(ch: u8) -> bool {
 
 pub fn is_carriage_return(ch: u8) -> bool {
     is_x(ch, '\r')
+}
+
+pub fn is_ternary_op(ch: u8) -> bool {
+    is_x(ch, '?')
 }
 
 pub fn is_digit(ch: u8) -> bool {

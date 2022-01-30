@@ -20,3 +20,4 @@ pub mod parse_object;
 pub mod parse_array;
 pub mod parse_return;
 pub mod parse_object_accessors;
+pub mod parse_ternary_op;

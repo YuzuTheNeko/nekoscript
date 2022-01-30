@@ -9,5 +9,7 @@ pub fn parse_expression(stream: &mut TokenStream) -> Nodes {
 
     let atom = parse_call(stream, atom);
 
-    apply_binary(stream, atom, 0)
+    let atom = apply_binary(stream, atom, 0);
+
+    parse_call(stream, atom)
 }

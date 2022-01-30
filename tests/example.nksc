@@ -4,4 +4,6 @@ neko data = object!{
 
 neko ok = 1;
 
-log(data->k);
+data->k = 1;
+
+log(data->k == 1 ? "yes": "no");

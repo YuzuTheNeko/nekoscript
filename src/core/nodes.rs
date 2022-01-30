@@ -12,6 +12,11 @@ pub enum Accessor {
 
 #[derive(Clone)]
 pub enum Nodes {
+    Ternary {
+        when_true: Box<Nodes>,
+        when_false: Box<Nodes>,
+        condition: Box<Nodes>
+    },
     Keyword(String),
     Value(Rc<RefCell<DataTypes>>),
     Operator(OperatorTypes),
@@ -107,6 +112,7 @@ impl Nodes {
             Nodes::Value(_) => "Value",
             Nodes::Return(_) => "Return",
             Nodes::FnCall { .. } => "FnCall",
+            Nodes::Ternary { .. } => "Ternary",
             Nodes::While { .. } => WHILE_KEYWORD,
             Nodes::VariableDef { .. } => "VarDef",
             Nodes::Punc(_) => "Punc",
@@ -117,6 +123,16 @@ impl Nodes {
 }
 
 impl Nodes {
+    pub fn to_ternary(&self) -> (&Box<Nodes>, &Box<Nodes>, &Box<Nodes>) {
+        match self {
+            Nodes::Ternary {
+                condition,
+                when_true,
+                when_false
+            } => (condition, when_true, when_false),
+            _ => panic!("Node not ternary")
+        }
+    }
     pub fn to_op(&self) -> &OperatorTypes {
         match self {
             Nodes::Operator(op) => op,

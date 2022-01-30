@@ -15,6 +15,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use crate::runtime::resolve_object_accessor::resolve_object_accessor;
 use crate::runtime::resolve_return::resolve_return;
+use crate::runtime::resolve_ternary::resolve_ternary;
 
 pub struct Interpreter {
     pub nodes: Vec<Nodes>,
@@ -49,6 +50,7 @@ impl Interpreter {
             Nodes::Return(_) => resolve_return(self, scope, node),
             Nodes::DynFnCall { .. } => resolve_dyn_call(self, scope, node),
             Nodes::VariableDef { .. } => resolve_variable(self, scope, node),
+            Nodes::Ternary { .. } => resolve_ternary(self, scope, node),
             Nodes::FnCall { .. } => resolve_func_call(self, scope, node),
             Nodes::While { .. } => resolve_while(self, scope, node),
             Nodes::Keyword(_) => resolve_keyword(self, scope, node),

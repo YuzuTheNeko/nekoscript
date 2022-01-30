@@ -12,3 +12,4 @@ pub mod resolve_variable;
 pub mod resolve_while;
 pub mod resolve_return;
 pub mod resolve_object_accessor;
+pub mod resolve_ternary;
