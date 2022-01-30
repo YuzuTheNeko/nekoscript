@@ -212,10 +212,6 @@ impl<'a> TokenStream<'a> {
         str
     }
 
-    pub fn is_special_op(&mut self, op: &str) -> bool {
-        self.fake_read_while(&is_op).eq(op)
-    }
-
     pub fn char(&self) -> u8 {
         if self.eof() {
             0

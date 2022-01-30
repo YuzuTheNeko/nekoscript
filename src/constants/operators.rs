@@ -12,11 +12,9 @@ pub const NOT_EQUALS: &str = "!=";
 
 pub const OPERATOR_TYPES: &str = "=+-*/!";
 
-pub const OPERATORS: [&str; 6] = [MULTI, SUB, DIV, NOT_EQUALS, ADD, EQUALS];
-
 pub const SUM_EQUAL: &str = "+=";
 pub const SUB_EQUAL: &str = "-=";
 
 pub const ASSIGN: &str = "=";
 
-pub const SPECIAL_OPERATOR_TYPES: [&str; 3] = [ASSIGN, SUM_EQUAL, SUB_EQUAL];
+pub const OPERATORS: [&str; 9] = [MULTI, SUB, DIV, NOT_EQUALS, ADD, EQUALS, ASSIGN, SUM_EQUAL, SUB_EQUAL];

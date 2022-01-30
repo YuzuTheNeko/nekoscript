@@ -2,6 +2,7 @@ use crate::core::nodes::Nodes;
 use crate::parsers::parse_delimited::parse_delimited;
 use crate::parsers::parse_expression::parse_expression;
 use crate::parsers::parse_func_usage::parse_func_usage;
+use crate::parsers::parse_object_accessors::parse_object_accessors;
 use crate::TokenStream;
 
 pub fn parse_call(stream: &mut TokenStream, node: Nodes) -> Nodes {
@@ -20,6 +21,8 @@ pub fn parse_call(stream: &mut TokenStream, node: Nodes) -> Nodes {
             args: args.into_iter().map(|n| Box::new(n)).collect(),
             body: data.1.clone(),
         }
+    } else if stream.is_kw("->") {
+        return parse_object_accessors(stream, node)
     } else {
         node
     }

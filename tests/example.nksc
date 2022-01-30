@@ -1,3 +1,7 @@
 neko data = object!{
-    fn: dyn () {}
+    uwu: 110
 };
+
+neko ok = 1;
+
+log(data->k);

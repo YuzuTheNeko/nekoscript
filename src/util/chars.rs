@@ -1,6 +1,6 @@
 use crate::constants::characters::{DIGIT_REGEX, ID_REGEX, ID_START_REGEX};
 use crate::constants::keywords::KEYWORDS;
-use crate::constants::operators::{OPERATOR_TYPES, SPECIAL_OPERATOR_TYPES};
+use crate::constants::operators::{OPERATOR_TYPES};
 use crate::constants::punctuations::PUNCTUATION_CHARACTERS;
 use regex::Regex;
 
@@ -56,10 +56,6 @@ pub fn is_op(ch: u8) -> bool {
 
 pub fn is_kw(str: &str) -> bool {
     KEYWORDS.contains(&str)
-}
-
-pub fn is_special_op(str: &str) -> bool {
-    SPECIAL_OPERATOR_TYPES.contains(&str)
 }
 
 pub fn is_punc(ch: u8) -> bool {

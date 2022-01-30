@@ -44,6 +44,13 @@ impl DataTypes {
         }
     }
 
+    pub fn to_obj(&self) -> &Rc<RwLock<HashMap<String, Nodes>>> {
+        match self {
+            DataTypes::Object(b) => b,
+            _ => panic!("Value is not object")
+        }
+    }
+
     pub fn to_bool(&self) -> &bool {
         match self {
             DataTypes::Bool(i) => i,
@@ -73,10 +80,7 @@ impl DataTypes {
     }
 
     pub fn to_object(&self) -> &Rc<RwLock<HashMap<String, Nodes>>> {
-        match self {
-            DataTypes::Object(v) => v,
-            _ => panic!("Value is not object"),
-        }
+        self.to_obj()
     }
 }
 
@@ -103,6 +107,13 @@ impl DataTypes {
 }
 
 impl DataTypes {
+    pub fn is_obj(&self) -> bool {
+        match self {
+            DataTypes::Object(_) => true,
+            _ => false
+        }
+    }
+
     pub fn is_int(&self) -> bool {
         match self {
             DataTypes::Int(_) => true,
@@ -139,7 +150,7 @@ impl DataTypes {
         self.kind().eq(other)
     }
 
-    pub fn is_equal(&self, other: &mut RefMut<DataTypes>) -> bool {
+    pub fn is_equal(&self, other: &mut DataTypes) -> bool {
         if self.is_type(other.kind()) {
             match self {
                 DataTypes::Text(s) => s.eq(other.to_text()),

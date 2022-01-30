@@ -1,5 +1,4 @@
 use crate::constants::keywords::{DYN_FN, FALSE, FUNCTION_DEFINITION, IF_KEYWORD, OBJECT_KEYWORD, RETURN_KEYWORD, TRUE, VARIABLE_KEYWORD, WHILE_KEYWORD};
-use crate::constants::operators::{ASSIGN, SUB_EQUAL, SUM_EQUAL};
 use crate::core::nodes::Nodes;
 use crate::parsers::parse_bool::parse_bool;
 use crate::parsers::parse_dyn_fn::parse_dyn_fn;
@@ -9,7 +8,6 @@ use crate::parsers::parse_if::parse_if;
 use crate::parsers::parse_object::parse_object;
 use crate::parsers::parse_return::parse_return;
 use crate::parsers::parse_scope::parse_scope;
-use crate::parsers::parse_special_operator::parse_special_op;
 use crate::parsers::parse_variable::parse_variable;
 use crate::parsers::parse_while::parse_while;
 use crate::TokenStream;
@@ -42,18 +40,5 @@ pub fn parse_atom(stream: &mut TokenStream) -> Nodes {
         return parse_return(stream)
     }
 
-    let got = stream.read_next();
-
-    match got {
-        Nodes::Keyword(str) => {
-            if stream.is_special_op(SUB_EQUAL)
-                || stream.is_special_op(SUM_EQUAL)
-                || stream.is_special_op(ASSIGN)
-            {
-                return parse_special_op(stream, str);
-            }
-            Nodes::Keyword(str)
-        }
-        _ => got,
-    }
+    stream.read_next()
 }

@@ -10,10 +10,25 @@ pub fn apply_bin(
     left: Rc<RefCell<DataTypes>>,
     right: Rc<RefCell<DataTypes>>,
 ) -> IReturn {
-    let lhs = &mut left.borrow_mut();
-    let rhs = &mut right.borrow_mut();
+    let mut lhs = left.borrow_mut();
+    let mut rhs = right.borrow_mut();
+
+    let lhs = &mut *lhs;
+    let rhs = &mut *rhs;
 
     match op {
+        OperatorTypes::AddAssign => {
+            *lhs = DataTypes::Int(lhs.to_int().add(rhs.to_int()));
+            Ok(DataTypes::null())
+        },
+        OperatorTypes::SubAssign => {
+            *lhs = DataTypes::Int(lhs.to_int().sub(rhs.to_int()));
+            Ok(DataTypes::null())
+        },
+        OperatorTypes::Assign => {
+            *lhs = rhs.clone();
+            Ok(DataTypes::null())
+        },
         OperatorTypes::Equals => Ok(DataTypes::wrap(DataTypes::Bool(lhs.is_equal(rhs)))),
         OperatorTypes::Add => {
             if !lhs.is_int() || !rhs.is_int() {

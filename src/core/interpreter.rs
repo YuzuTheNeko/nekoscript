@@ -9,11 +9,11 @@ use crate::runtime::resolve_func_def::resolve_func_def;
 use crate::runtime::resolve_if::resolve_if;
 use crate::runtime::resolve_keyword::resolve_keyword;
 use crate::runtime::resolve_scope::resolve_scope;
-use crate::runtime::resolve_special_assignment::resolve_special_assignment;
 use crate::runtime::resolve_variable::resolve_variable;
 use crate::runtime::resolve_while::resolve_while;
 use std::cell::RefCell;
 use std::rc::Rc;
+use crate::runtime::resolve_object_accessor::resolve_object_accessor;
 use crate::runtime::resolve_return::resolve_return;
 
 pub struct Interpreter {
@@ -45,6 +45,7 @@ impl Interpreter {
 
     pub fn execute(&self, scope: &Scope, node: &Nodes) -> IReturn {
         match node {
+            Nodes::ObjectAccessor { .. } => resolve_object_accessor(self, scope, node),
             Nodes::Return(_) => resolve_return(self, scope, node),
             Nodes::DynFnCall { .. } => resolve_dyn_call(self, scope, node),
             Nodes::VariableDef { .. } => resolve_variable(self, scope, node),
@@ -54,7 +55,6 @@ impl Interpreter {
             Nodes::FnDef { .. } => resolve_func_def(self, scope, node),
             Nodes::Scope { .. } => resolve_scope(self, scope, node),
             Nodes::BinaryExpr { .. } => resolve_binary(self, scope, node),
-            Nodes::SpecialAssignment { .. } => resolve_special_assignment(self, scope, node),
             Nodes::Value(value) => Ok(value.clone()),
             Nodes::If { .. } => resolve_if(self, scope, node),
             _ => Ok(DataTypes::null()),

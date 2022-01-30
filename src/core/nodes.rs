@@ -1,8 +1,14 @@
 use crate::constants::keywords::WHILE_KEYWORD;
 use crate::core::data_types::DataTypes;
-use crate::core::operator_types::{OperatorTypes, SpecialOperatorTypes};
+use crate::core::operator_types::{OperatorTypes};
 use std::cell::RefCell;
 use std::rc::Rc;
+
+#[derive(Clone)]
+pub enum Accessor {
+    Property(String),
+    Method(String, Vec<Nodes>)
+}
 
 #[derive(Clone)]
 pub enum Nodes {
@@ -19,11 +25,6 @@ pub enum Nodes {
         when_false: Option<Box<Nodes>>,
         races: Vec<(Nodes, Nodes)>,
     },
-    SpecialAssignment {
-        op: SpecialOperatorTypes,
-        keyword: String,
-        value: Box<Nodes>,
-    },
     FnDef {
         name: String,
         params: Vec<String>,
@@ -33,6 +34,10 @@ pub enum Nodes {
         name: Option<String>,
         func: Option<Box<Nodes>>,
         args: Vec<Box<Nodes>>,
+    },
+    ObjectAccessor {
+        value: Box<Nodes>,
+        accessors: Vec<Accessor>
     },
     BinaryExpr {
         op: OperatorTypes,
@@ -93,6 +98,7 @@ impl Nodes {
 impl Nodes {
     pub fn kind(&self) -> &str {
         match self {
+            Nodes::ObjectAccessor { .. } => "Accessor",
             Nodes::DynFnCall { .. } => "dyn fn call",
             Nodes::If { .. } => "If",
             Nodes::FnDef { .. } => "FnDef",
@@ -101,7 +107,6 @@ impl Nodes {
             Nodes::Value(_) => "Value",
             Nodes::Return(_) => "Return",
             Nodes::FnCall { .. } => "FnCall",
-            Nodes::SpecialAssignment { .. } => "SpecialAssigment",
             Nodes::While { .. } => WHILE_KEYWORD,
             Nodes::VariableDef { .. } => "VarDef",
             Nodes::Punc(_) => "Punc",
@@ -116,6 +121,13 @@ impl Nodes {
         match self {
             Nodes::Operator(op) => op,
             _ => panic!("Node not an operator."),
+        }
+    }
+
+    pub fn to_obj_accessor(&self) -> (&Box<Nodes>, &Vec<Accessor>) {
+        match self {
+            Nodes::ObjectAccessor { value, accessors } => (value, accessors),
+            _ => panic!("Node not object accessor.")
         }
     }
 
@@ -169,13 +181,6 @@ impl Nodes {
         match self {
             Nodes::Scope(c) => c,
             _ => panic!("Node not a scope"),
-        }
-    }
-
-    pub fn to_special_assignment(&self) -> (&SpecialOperatorTypes, &String, &Box<Nodes>) {
-        match self {
-            Nodes::SpecialAssignment { keyword, op, value } => (op, keyword, value),
-            _ => panic!("Node is not sp assign"),
         }
     }
 
