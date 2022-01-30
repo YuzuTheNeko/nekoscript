@@ -9,4 +9,4 @@ neko ok = [
 
 ok->set(1, "lmao");
 ok->set(2, yes);
-log(ok->at(2));
+log(ok->at(2), ok->length);

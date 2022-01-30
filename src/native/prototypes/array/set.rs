@@ -18,7 +18,11 @@ pub fn set() -> PrototypeNativeFunction {
 
                 let value: &Rc<RefCell<DataTypes>> = args.get(1).unwrap();
 
-                arr.insert(*arg as usize, value.clone());
+                while arg.ge(&(arr.len() as i64)) {
+                    arr.push(DataTypes::null())
+                }
+
+                arr[*arg as usize] = value.clone();
             }
 
             Ok(DataTypes::null())
