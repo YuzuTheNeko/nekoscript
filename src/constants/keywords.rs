@@ -10,6 +10,8 @@ pub const VARIABLE_KEYWORD: &str = "neko";
 
 pub const OBJECT_KEYWORD: &str = "object!";
 
+pub const NULL: &str = "null";
+
 pub const TRUE: &str = "true";
 pub const FALSE: &str = "false";
 pub const WHILE_KEYWORD: &str = "while";

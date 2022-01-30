@@ -1,14 +1,17 @@
-neko x = 0;
+neko yes = "uwu";
 
-define uwu() {
-    x += 1;
-    log(x);
-    if (x == 5) {
-        return x;
-    };
-    return uwu();
-};
+neko ok = [
+    dyn() {
+        return 109;
+    }(),
+    yes,
+    [
+        "depends"
+    ]
+];
 
-log((dyn() {
-    return 5;
-})() == 5);
+log(
+    ok->at(2)->at(0),
+    ok->at(0),
+    ok->at(1)
+);

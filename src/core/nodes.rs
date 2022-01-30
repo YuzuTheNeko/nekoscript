@@ -62,8 +62,7 @@ pub enum Nodes {
         right: Box<Node>,
     },
     DynFnCall {
-        params: Vec<String>,
-        body: Box<Node>,
+        left: Box<Node>,
         args: Vec<Box<Node>>,
     },
     Return(Box<Node>),
@@ -94,6 +93,13 @@ impl Nodes {
         match self {
             Nodes::Value(v) => (*v.borrow()).is_dyn_fn(),
             _ => false,
+        }
+    }
+
+    pub fn is_dyn_call(&self) -> bool {
+        match self {
+            Nodes::DynFnCall { .. } => true,
+            _ => false
         }
     }
 
@@ -152,6 +158,13 @@ impl Nodes {
             _ => panic!("Node not ternary")
         }
     }
+
+    pub fn to_value(&self) -> &Rc<RefCell<DataTypes>> {
+        match self {
+            Self::Value(v) => v,
+            _ => panic!("Node not data type")
+        }
+    }
     pub fn to_op(&self) -> &OperatorTypes {
         match self {
             Nodes::Operator(op) => op,
@@ -173,9 +186,9 @@ impl Nodes {
         }
     }
 
-    pub fn to_dyn_fn_call(&self) -> (&Vec<String>, &Vec<Box<Node>>, &Box<Node>) {
+    pub fn to_dyn_fn_call(&self) -> (&Box<Node>, &Vec<Box<Node>>) {
         match self {
-            Nodes::DynFnCall { params, body, args } => (params, args, body),
+            Nodes::DynFnCall { left, args } => (left, args),
             _ => panic!("Node not dyn call"),
         }
     }

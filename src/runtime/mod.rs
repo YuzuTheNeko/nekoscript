@@ -13,3 +13,5 @@ pub mod resolve_while;
 pub mod resolve_return;
 pub mod resolve_object_accessor;
 pub mod resolve_ternary;
+pub mod resolve_params;
+pub mod resolve_value;

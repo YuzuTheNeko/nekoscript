@@ -16,8 +16,10 @@ use std::rc::Rc;
 use crate::runtime::resolve_object_accessor::resolve_object_accessor;
 use crate::runtime::resolve_return::resolve_return;
 use crate::runtime::resolve_ternary::resolve_ternary;
+use crate::runtime::resolve_value::resolve_value;
 
 pub struct Interpreter {
+    pub path: String,
     pub nodes: Vec<Node>,
 }
 
@@ -31,7 +33,8 @@ impl Interpreter {
             match self.execute(&scope, node) {
                 Err(err) => match err {
                     ReturnTypes::RuntimeError(str) => {
-                        panic!("{}", str);
+                        println!("RuntimeError: {}\nFile: {}", str, self.path);
+                        std::process::exit(0)
                     }
                     _ => {}
                 },
@@ -40,8 +43,11 @@ impl Interpreter {
         }
     }
 
-    pub fn new(nodes: Vec<Node>) -> Self {
-        Self { nodes }
+    pub fn new(nodes: Vec<Node>, path: String) -> Self {
+        Self {
+            nodes,
+            path
+        }
     }
 
     pub fn execute(&self, scope: &Scope, node: &Node) -> IReturn {
@@ -57,7 +63,7 @@ impl Interpreter {
             Nodes::FnDef { .. } => resolve_func_def(self, scope, node),
             Nodes::Scope { .. } => resolve_scope(self, scope, node),
             Nodes::BinaryExpr { .. } => resolve_binary(self, scope, node),
-            Nodes::Value(value) => Ok(value.clone()),
+            Nodes::Value(value) => resolve_value(self, scope, node),
             Nodes::If { .. } => resolve_if(self, scope, node),
             _ => Ok(DataTypes::null()),
         }

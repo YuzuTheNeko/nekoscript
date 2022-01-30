@@ -1,10 +1,12 @@
-use crate::constants::keywords::{DYN_FN, FALSE, FUNCTION_DEFINITION, IF_KEYWORD, OBJECT_KEYWORD, RETURN_KEYWORD, TRUE, VARIABLE_KEYWORD, WHILE_KEYWORD};
+use crate::constants::keywords::{DYN_FN, FALSE, FUNCTION_DEFINITION, IF_KEYWORD, NULL, OBJECT_KEYWORD, RETURN_KEYWORD, TRUE, VARIABLE_KEYWORD, WHILE_KEYWORD};
+use crate::core::data_types::DataTypes;
 use crate::core::nodes::{Node, Nodes};
 use crate::parsers::parse_bool::parse_bool;
 use crate::parsers::parse_dyn_fn::parse_dyn_fn;
 use crate::parsers::parse_expression::parse_expression;
 use crate::parsers::parse_function_definition::parse_func_def;
 use crate::parsers::parse_if::parse_if;
+use crate::parsers::parse_null::parse_null;
 use crate::parsers::parse_object::parse_object;
 use crate::parsers::parse_return::parse_return;
 use crate::parsers::parse_scope::parse_scope;
@@ -22,6 +24,8 @@ pub fn parse_atom(stream: &mut TokenStream) -> Node {
 
     if stream.is_kw(FALSE) || stream.is_kw(TRUE) {
         return parse_bool(stream);
+    } else if stream.is_kw(NULL) {
+        return parse_null(stream)
     } else if stream.is_kw(VARIABLE_KEYWORD) {
         return parse_variable(stream);
     } else if stream.is_punc('{') {

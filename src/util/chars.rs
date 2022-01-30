@@ -24,6 +24,10 @@ pub fn is_ternary_op(ch: u8) -> bool {
     is_x(ch, '?')
 }
 
+pub fn is_comment(ch: u8) -> bool {
+    is_x(ch, '@')
+}
+
 pub fn is_digit(ch: u8) -> bool {
     Regex::new(DIGIT_REGEX)
         .unwrap()

@@ -8,9 +8,7 @@ use crate::parsers::parse_number::parse_number;
 use crate::parsers::parse_op::parse_op;
 use crate::parsers::parse_punc::parse_punc;
 use crate::parsers::parse_string::parse_string;
-use crate::util::chars::{
-    is_digit, is_id_start, is_newline, is_op, is_punc, is_quote, is_skippable_char, is_whitespace,
-};
+use crate::util::chars::{is_comment, is_digit, is_id_start, is_newline, is_op, is_punc, is_quote, is_skippable_char, is_whitespace};
 
 #[derive(Default)]
 pub struct TokenStream<'a> {
@@ -149,6 +147,10 @@ impl<'a> TokenStream<'a> {
         self.skip(1)
     }
 
+    pub fn skip_comment(&mut self) {
+        self.read_while(&| n | !is_newline(n));
+    }
+
     pub fn skip_op(&mut self, op: &str) {
         self.skip_kw(&op)
     }
@@ -162,7 +164,10 @@ impl<'a> TokenStream<'a> {
             return Nodes::create(Nodes::Value(DataTypes::null()), self.pos());
         }
 
-        if is_op(char) {
+        if is_comment(char) {
+            self.skip_comment();
+            return self.read_next()
+        } else if is_op(char) {
             return parse_op(self);
         } else if char.eq(&b'[') {
             return parse_array(self);

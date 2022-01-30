@@ -23,7 +23,7 @@ pub fn parse_array(stream: &mut TokenStream) -> Node {
     stream.skip_punc(']');
 
     Nodes::create(
-        Nodes::Value(Rc::new(RefCell::new(DataTypes::Array(Rc::new(RwLock::new(vc)))))),
+        Nodes::Value(Rc::new(RefCell::new(DataTypes::RawArray(Rc::new(RwLock::new(vc)))))),
         pos
     )
 }

@@ -1,6 +1,4 @@
-use crate::constants::data_types::{
-    ARRAY_TYPE, BOOL_TYPE, FN_TYPE, INT_TYPE, NULL_TYPE, OBJECT_TYPE, TEXT_TYPE,
-};
+use crate::constants::data_types::{ARRAY_TYPE, BOOL_TYPE, FN_TYPE, INT_TYPE, NULL_TYPE, OBJECT_TYPE, RAW_ARRAY_TYPE, RAW_OBJECT_TYPE, TEXT_TYPE};
 use crate::core::nodes::{Node, Nodes};
 use std::borrow::Borrow;
 use std::cell::{RefCell, RefMut};
@@ -18,14 +16,16 @@ pub enum DataTypes {
     },
     Bool(bool),
     Null,
-    Object(Rc<RwLock<HashMap<String, Node>>>),
-    Array(Rc<RwLock<Vec<Node>>>),
+    RawObject(Rc<RwLock<HashMap<String, Node>>>),
+    RawArray(Rc<RwLock<Vec<Node>>>),
+    Array(Rc<RwLock<Vec<Rc<RefCell<DataTypes>>>>>),
+    Object(Rc<RwLock<HashMap<String, Rc<RefCell<DataTypes>>>>>)
 }
 
 impl DataTypes {
-    pub fn to_array(&self) -> &Rc<RwLock<Vec<Node>>> {
+    pub fn to_raw_array(&self) -> &Rc<RwLock<Vec<Node>>> {
         match self {
-            DataTypes::Array(v) => v,
+            DataTypes::RawArray(v) => v,
             _ => panic!("Value is not array"),
         }
     }
@@ -44,9 +44,9 @@ impl DataTypes {
         }
     }
 
-    pub fn to_obj(&self) -> &Rc<RwLock<HashMap<String, Node>>> {
+    pub fn to_raw_obj(&self) -> &Rc<RwLock<HashMap<String, Node>>> {
         match self {
-            DataTypes::Object(b) => b,
+            DataTypes::RawObject(b) => b,
             _ => panic!("Value is not object")
         }
     }
@@ -79,14 +79,26 @@ impl DataTypes {
         }
     }
 
-    pub fn to_object(&self) -> &Rc<RwLock<HashMap<String, Node>>> {
-        self.to_obj()
+    pub fn to_array(&self) -> &Rc<RwLock<Vec<Rc<RefCell<DataTypes>>>>> {
+        match self {
+            DataTypes::Array(v) => v,
+            _ => panic!("Value is not array")
+        }
+    }
+
+    pub fn to_object(&self) -> &Rc<RwLock<HashMap<String, Rc<RefCell<DataTypes>>>>> {
+        match self {
+            DataTypes::Object(o) => o,
+            _ => panic!("Value is not object")
+        }
     }
 }
 
 impl DataTypes {
     pub fn kind(&self) -> &str {
         match self {
+            DataTypes::RawArray(_) => RAW_ARRAY_TYPE,
+            DataTypes::RawObject(_) => RAW_OBJECT_TYPE,
             DataTypes::Array(_) => ARRAY_TYPE,
             DataTypes::Null => NULL_TYPE,
             DataTypes::Bool(_) => BOOL_TYPE,

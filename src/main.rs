@@ -44,7 +44,7 @@ fn main() {
 
     stream.start();
 
-    let itr = Interpreter::new(stream.nodes);
+    let itr = Interpreter::new(stream.nodes, path.to_str().unwrap().to_string());
 
     itr.run();
 }

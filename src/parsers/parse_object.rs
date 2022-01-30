@@ -35,7 +35,7 @@ pub fn parse_object(stream: &mut TokenStream) -> Node {
     stream.skip_punc('}');
 
     Nodes::create(
-        Nodes::Value(Rc::new(RefCell::new(DataTypes::Object(Rc::new(RwLock::new(hash)))))),
+        Nodes::Value(Rc::new(RefCell::new(DataTypes::RawObject(Rc::new(RwLock::new(hash)))))),
         pos
     )
 }

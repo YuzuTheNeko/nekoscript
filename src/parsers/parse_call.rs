@@ -11,20 +11,11 @@ pub fn parse_call(stream: &mut TokenStream, node: Node) -> Node {
     let pos = stream.pos();
 
     if stream.is_punc('(') {
-        if !node.value.is_dyn_fn() {
-            stream.panic("Cannot call a non function");
-            unreachable!()
-        }
-        let data = node.value.to_dyn_fn();
-        let data = data.borrow();
-        let data = data.to_dyn_fn();
-
         let args = parse_delimited(stream, '(', ')', ',', &parse_expression);
         Nodes::create(
             Nodes::DynFnCall {
-                params: data.0.clone(),
-                args: args.into_iter().map(|n| Box::new(n)).collect(),
-                body: data.1.clone(),
+                left: Box::new(node),
+                args: args.into_iter().map(|n| Box::new(n)).collect()
             },
             pos
         )
