@@ -21,8 +21,6 @@ log(typeof(1)); @ int
 log(typeof(true)); @ boolean
 log(typeof(null)); @ this will not work, but it's type is null 
 ```
-Note that comments (@) are not yet supported.
-
 Accessing object properties is not really hard, it kind of is a mix-up between C++ and JavaScript:
 ```
 neko uwu = object!{
@@ -36,13 +34,15 @@ uwu->yes = 10;
 
 log(uwu->yes);
 ```
-Arrays can only be defined at the moment, they do not have any option to get data inside yet.
+Arrays are simple, they look pretty much like JavaScript.
 ```
 neko arr = [
     "uwu",
     object!{},
     0
 ];
+
+log(arr->at(0)); @ Will print uwu
 ```
 I forgot, do not try to log objects or arrays, these cannot be deserialized to strings *yet*.
 
@@ -62,10 +62,9 @@ Ternary operators are lovely, it would hurt me not to add it:
 ```
 neko u = 10;
 
+@ Should output `yes`, might break? I do not think so.
 log(u == 10 ? "yes" : "no");
 ```
-Should output `yes`, might break? I do not think so.
-
 Dynamic functions, they are basically the son of defined functions, but these do not have a name.
 ```
 neko u = dyn () {
