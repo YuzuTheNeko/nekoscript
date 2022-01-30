@@ -148,3 +148,4 @@ public->join = dyn (x, y) {
     return x + " " + y 
 };
 ```
+Note though, that due to lack of cache this will be loaded every time it is used.
