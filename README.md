@@ -10,3 +10,6 @@ Head over to [releases](https://github.com/Rubenennj/nekoscript/releases) and do
 Once done, move the executable to a place it won't bother you much and copy the folder where you put the file.
 Search for system environment variables on your PC, go to `Path` and add a new path which would be the folder path you previously copied.
 Once done, you can use `nekoscript` in any terminal/console allocated on your PC.
+
+## Updating
+Simply download the new release and replace the executable file with the newer one.
