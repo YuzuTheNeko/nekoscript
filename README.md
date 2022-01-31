@@ -5,7 +5,7 @@ You are more than welcome to report bugs, note that some stuff is not yet implem
 
 Examples can be found [here](https://github.com/Rubenennj/nekoscript/tree/dev/examples).
 
-# Installation
+## Installation
 Head over to [releases](https://github.com/Rubenennj/nekoscript/releases) and download the latest tag (the executable file).
 Once done, move the executable to a place it won't bother you much and copy the folder where you put the file.
 Search for system environment variables on your PC, go to `Path` and add a new path which would be the folder path you previously copied.
