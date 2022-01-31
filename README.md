@@ -3,4 +3,4 @@ That's it. I just made this programming language to keep myself busy, and becaus
 
 You are more than welcome to report bugs, note that some stuff is not yet implemented.
 
-Examples can be found [here](https://github.com/Rubenennj/nekoscript/tree/dev/examples)
+Examples can be found [here](https://github.com/Rubenennj/nekoscript/tree/dev/examples).
