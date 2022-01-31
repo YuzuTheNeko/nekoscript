@@ -13,6 +13,7 @@ use crate::runtime::resolve_variable::resolve_variable;
 use crate::runtime::resolve_while::resolve_while;
 use std::cell::RefCell;
 use std::rc::Rc;
+use crate::core::process::Process;
 use crate::runtime::resolve_object_accessor::resolve_object_accessor;
 use crate::runtime::resolve_return::resolve_return;
 use crate::runtime::resolve_ternary::resolve_ternary;
@@ -28,10 +29,14 @@ pub type IReturn = Result<Rc<RefCell<DataTypes>>, ReturnTypes>;
 impl Interpreter {
     pub fn run(&self, scope: Option<&Scope>) {
         if !scope.is_some() {
-            return self.run(Some(&Scope::new()))
+            return self.run(Some(&Scope::new(Rc::new(RefCell::new(Process::new(self.path.clone()))))))
         }
 
         let scope = scope.unwrap();
+
+        {
+            scope.set_path(self.path.clone());
+        }
 
         for node in self.nodes.iter() {
             match self.execute(scope, node) {
@@ -47,7 +52,11 @@ impl Interpreter {
         }
     }
 
-    pub fn new(nodes: Vec<Node>, path: String) -> Self {
+    pub fn new(nodes: Vec<Node>, mut path: String) -> Self {
+        if path.starts_with("\\\\?") {
+            path = path[4..].to_string();
+        }
+
         Self {
             nodes,
             path

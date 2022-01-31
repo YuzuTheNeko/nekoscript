@@ -5,7 +5,6 @@ use crate::core::native_function::{PropType, PrototypeNativeFunction};
 
 pub fn at() -> PrototypeNativeFunction {
     PrototypeNativeFunction {
-        name: String::from("at"),
         kind: PropType::Method,
         body: Box::new(| scope, this, args| {
             let pos: &Rc<RefCell<DataTypes>> = args.get(0).unwrap();

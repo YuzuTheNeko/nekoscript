@@ -5,10 +5,23 @@ use std::cell::{RefCell, RefMut};
 use std::collections::HashMap;
 use std::rc::Rc;
 use std::sync::RwLock;
+use crate::core::native_function::PropReturn;
+
+#[derive(Clone, PartialOrd, PartialEq)]
+pub enum NativeFnType {
+    Global,
+    Module
+}
 
 #[derive(Clone)]
 pub enum DataTypes {
     Text(String),
+    NativeFn {
+        name: String,
+        kind: NativeFnType,
+        module: Option<String>,
+        params: Option<Vec<Node>>
+    },
     Int(i64),
     Fn {
         params: Vec<String>,
@@ -86,6 +99,13 @@ impl DataTypes {
         }
     }
 
+    pub fn to_native_fn(&self) -> (&String, &NativeFnType, &Option<String>, &Option<Vec<Node>>) {
+        match self {
+            DataTypes::NativeFn { name, kind, module, params } => (name, kind, module, params),
+            _ => panic!("Value is not native func")
+        }
+    }
+
     pub fn to_object(&self) -> &Rc<RwLock<HashMap<String, Rc<RefCell<DataTypes>>>>> {
         match self {
             DataTypes::Object(o) => o,
@@ -104,7 +124,7 @@ impl DataTypes {
             DataTypes::Bool(_) => BOOL_TYPE,
             DataTypes::Int(_) => INT_TYPE,
             DataTypes::Text(_) => TEXT_TYPE,
-            DataTypes::Fn { .. } => FN_TYPE,
+            DataTypes::Fn { .. } | DataTypes::NativeFn { .. } => FN_TYPE,
             DataTypes::Object(_) => OBJECT_TYPE,
         }
     }
@@ -139,6 +159,13 @@ impl DataTypes {
             DataTypes::Int(b) => b.gt(&0),
             DataTypes::Text(b) => !b.is_empty(),
             _ => true,
+        }
+    }
+
+    pub fn is_native_fn(&self) -> bool {
+        match self {
+            DataTypes::NativeFn { .. } => true,
+            _ => false
         }
     }
 

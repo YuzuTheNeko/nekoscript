@@ -13,7 +13,6 @@ pub enum PropType {
 }
 
 pub struct PrototypeNativeFunction {
-    pub name: String,
     pub kind: PropType,
     pub body: Box<
         dyn Fn(
@@ -21,7 +20,4 @@ pub struct PrototypeNativeFunction {
         ) -> IReturn
     >
 }
-pub struct NativeFunction {
-    pub name: String,
-    pub body: PropReturn
-}
+pub struct NativeFunction(pub PropReturn);

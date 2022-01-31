@@ -5,7 +5,6 @@ use crate::core::native_function::{PropType, PrototypeNativeFunction};
 
 pub fn set() -> PrototypeNativeFunction {
     PrototypeNativeFunction {
-        name: String::from("set"),
         kind: PropType::Method,
         body: Box::new(| scope, this, args | {
             {

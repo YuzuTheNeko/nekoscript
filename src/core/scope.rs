@@ -1,33 +1,33 @@
 use crate::core::data_types::DataTypes;
 use crate::core::native_function::NativeFunction;
 use crate::core::nodes::{Node, Nodes};
-use crate::native::loader::load_native_functions;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 use std::sync::RwLock;
+use crate::core::process::Process;
 
 #[derive(Default)]
 pub struct Scope {
     pub variables: Rc<RwLock<HashMap<String, Rc<RefCell<DataTypes>>>>>,
     pub functions: Rc<RwLock<HashMap<String, Node>>>,
-    pub native: Vec<NativeFunction>,
+    pub process: Rc<RefCell<Process>>
 }
 
 impl Scope {
-    pub fn new() -> Self {
+    pub fn new(process: Rc<RefCell<Process>>) -> Self {
         Self {
-            native: load_native_functions(),
+            process,
             ..Self::default()
         }
     }
 
-    pub fn set(&self, key: String, value: Rc<RefCell<DataTypes>>) {
-        self.variables.write().unwrap().insert(key, value);
+    pub fn set_path(&self, path: String) {
+        self.set("path".to_owned(), DataTypes::wrap(DataTypes::Text(path)));
     }
 
-    pub fn is_native_fn(&self, key: &String) -> bool {
-        self.native.iter().any(|f| f.name.eq(key))
+    pub fn set(&self, key: String, value: Rc<RefCell<DataTypes>>) {
+        self.variables.write().unwrap().insert(key, value);
     }
 
     pub fn is_def_fn(&self, key: &String) -> bool {
@@ -39,7 +39,7 @@ impl Scope {
     }
 
     pub fn from(scope: &Scope) -> Self {
-        let mut sc = Self::new();
+        let mut sc = Self::new(scope.process.clone());
 
         {
             let mut writer = sc.variables.write().unwrap();

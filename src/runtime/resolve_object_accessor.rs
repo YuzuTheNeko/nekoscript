@@ -1,15 +1,18 @@
 
 use std::cell::RefCell;
 use std::rc::Rc;
-use crate::core::data_types::DataTypes;
+use crate::core::data_types::{DataTypes, NativeFnType};
 use crate::core::interpreter::IReturn;
 use crate::core::native_function::PropType;
 use crate::core::nodes::{Accessor, Node, Nodes, Position};
 use crate::core::return_types::ReturnTypes::RuntimeError;
 use crate::core::scope::Scope;
 use crate::Interpreter;
-use crate::native::prototypes::get_prototypes::get_prototypes;
+use crate::native::get_prototypes::get_prototypes;
 use crate::runtime::call_function::call_function;
+use crate::runtime::internals::call_native_fn::call_native_fn;
+use crate::runtime::internals::resolve_native_module_call::resolve_native_module_call;
+use crate::runtime::resolve_func_call::resolve_func_call;
 use crate::runtime::resolve_params::resolve_params;
 
 pub fn resolve_object_accessor(itr: &Interpreter, scope: &Scope, old: &Node) -> IReturn {
@@ -26,7 +29,7 @@ pub fn resolve_object_accessor(itr: &Interpreter, scope: &Scope, old: &Node) -> 
                         if !borrow.is_obj() {
                             let protos = get_prototypes(borrow.kind());
 
-                            let native = protos.into_iter().find(| m | m.name.eq(name));
+                            let native = protos.get(name);
 
                             if !native.is_some() {
                                 return Ok(DataTypes::null())
@@ -64,7 +67,7 @@ pub fn resolve_object_accessor(itr: &Interpreter, scope: &Scope, old: &Node) -> 
                         if !borrow.is_obj() {
                             let protos = get_prototypes(borrow.kind());
 
-                            let got = protos.into_iter().find(| m | m.name.eq(name));
+                            let got = protos.get(name);
 
                             if !got.is_some() {
                                 return Err(RuntimeError(old.display(&format!("Attempted to call nulled function {}", name))))
@@ -95,8 +98,21 @@ pub fn resolve_object_accessor(itr: &Interpreter, scope: &Scope, old: &Node) -> 
 
                             let res = res.borrow();
 
-                            if !res.is_dyn_fn() {
+                            if !res.is_dyn_fn() && !res.is_native_fn() {
                                 return Err(RuntimeError(old.display(&format!("Property {} is not a function", name))))
+                            }
+
+                            if res.is_native_fn() {
+                                let data = res.to_native_fn();
+
+                                if data.1.eq(&NativeFnType::Module) {
+                                    return resolve_native_module_call(
+                                        itr,
+                                        scope,
+                                        res,
+                                        &params.iter().map(| n | Box::new(n.clone())).collect()
+                                    )
+                                }
                             }
 
                             let data = res.to_dyn_fn();

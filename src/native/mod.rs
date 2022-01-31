@@ -1,7 +1,5 @@
-mod log;
-
-mod _typeof;
-pub mod loader;
-pub mod prototypes;
-mod system_time;
-mod load_file;
+pub mod get_prototypes;
+pub mod functions;
+mod int;
+mod array;
+pub mod modules;

@@ -1,6 +1,5 @@
 pub mod apply_bin;
 pub mod call_function;
-pub mod call_native_fn;
 pub mod resolve_binary;
 pub mod resolve_dyn_call;
 pub mod resolve_func_call;
@@ -15,3 +14,4 @@ pub mod resolve_object_accessor;
 pub mod resolve_ternary;
 pub mod resolve_params;
 pub mod resolve_value;
+mod internals;
