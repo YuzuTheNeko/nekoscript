@@ -1,6 +1,0 @@
-neko x = 1;
-neko a = x;
-
-a = 10; @ You might expect x to still be 1
-
-log(x, a); @ Will print 10 10
