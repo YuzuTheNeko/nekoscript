@@ -15,7 +15,7 @@ use crate::core::scope::Scope;
 
 pub fn load_file() -> NativeFunction {
     NativeFunction(
-        Box::new(| scope, args | {
+        Box::new(| _, scope, args | {
             let path: &Rc<RefCell<DataTypes>> = args.get(0).unwrap();
             let path = path.borrow();
             let mut path = path.to_string();

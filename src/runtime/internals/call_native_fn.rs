@@ -13,5 +13,5 @@ pub fn call_native_fn(itr: &Interpreter, scope: &Scope, args: &Vec<Box<Node>>, f
         }
     }
 
-    f.0(scope, &params)
+    f.0(itr, scope, &params)
 }

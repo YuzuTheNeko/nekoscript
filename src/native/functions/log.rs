@@ -3,7 +3,7 @@ use crate::core::native_function::NativeFunction;
 
 pub fn log() -> NativeFunction {
     NativeFunction(
-        Box::new(|scope, args| {
+        Box::new(| _, scope, args| {
             let mut str = String::new();
 
             for i in args.into_iter() {

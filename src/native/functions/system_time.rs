@@ -4,7 +4,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 pub fn system_time() -> NativeFunction {
     NativeFunction(
-        Box::new(|_, _| {
+        Box::new(| _, _, _| {
             Ok(DataTypes::wrap(DataTypes::Int(
                 SystemTime::now()
                     .duration_since(UNIX_EPOCH)

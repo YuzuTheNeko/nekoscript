@@ -18,7 +18,7 @@ pub fn format() -> Rc<RefCell<DataTypes>> {
 
 pub fn format_this() -> NativeFunction {
     NativeFunction(
-        Box::new(| scope, args | {
+        Box::new(| _, scope, args | {
             let mut vc = vec![];
 
             for i in args {

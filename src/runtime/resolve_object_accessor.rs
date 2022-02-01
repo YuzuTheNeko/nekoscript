@@ -41,7 +41,7 @@ pub fn resolve_object_accessor(itr: &Interpreter, scope: &Scope, old: &Node) -> 
                                 return Ok(DataTypes::wrap(DataTypes::Text(format!("define {}(scope, args) {{ [ native code ] }};", name))))
                             }
 
-                            match (native.body)(scope, borrow, &vec![]) {
+                            match (native.body)(itr, scope, borrow, &vec![]) {
                                 Ok(v) => {
                                     next = Some(v)
                                 },
@@ -80,7 +80,7 @@ pub fn resolve_object_accessor(itr: &Interpreter, scope: &Scope, old: &Node) -> 
                             }
 
                             match resolve_params(itr, scope, params) {
-                                Ok(params) => match (got.body)(scope, borrow, &params) {
+                                Ok(params) => match (got.body)(itr, scope, borrow, &params) {
                                     Ok(e) => next = Some(e),
                                     Err(e) => return Err(e)
                                 },

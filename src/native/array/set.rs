@@ -6,7 +6,7 @@ use crate::core::native_function::{PropType, PrototypeNativeFunction};
 pub fn set() -> PrototypeNativeFunction {
     PrototypeNativeFunction {
         kind: PropType::Method,
-        body: Box::new(| scope, this, args | {
+        body: Box::new(| _, scope, this, args | {
             {
                 let arr = this.to_array();
                 let mut arr = arr.write().unwrap();
