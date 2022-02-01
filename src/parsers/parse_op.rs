@@ -1,4 +1,4 @@
-use crate::constants::operators::{ADD, ASSIGN, DIV, EQUALS, MULTI, NOT_EQUALS, SUB, SUB_EQUAL, SUM_EQUAL};
+use crate::constants::operators::{ADD, ASSIGN, DIV, EQUALS, GREATER, GREATER_EQ, LESSER, LESSER_EQ, MULTI, NOT_EQUALS, SUB, SUB_EQUAL, SUM_EQUAL};
 use crate::core::nodes::{Node, Nodes};
 use crate::core::operator_types::OperatorTypes;
 use crate::core::token_stream::TokenStream;
@@ -28,6 +28,14 @@ pub fn parse_op(stream: &mut TokenStream) -> Node {
             Nodes::Operator(OperatorTypes::Div)
         } else if op.eq(MULTI) {
             Nodes::Operator(OperatorTypes::Multi)
+        } else if op.eq(GREATER) {
+            Nodes::Operator(OperatorTypes::Greater)
+        } else if op.eq(GREATER_EQ) {
+            Nodes::Operator(OperatorTypes::GreaterEq)
+        } else if op.eq(LESSER_EQ) {
+            Nodes::Operator(OperatorTypes::LesserEq)
+        } else if op.eq(LESSER) {
+            Nodes::Operator(OperatorTypes::Lesser)
         } else {
             stream.panic(&format!("Unsupported operator {}", op));
             unreachable!()

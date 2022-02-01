@@ -14,6 +14,46 @@ pub fn apply_bin(
     let mut rhs = right.borrow_mut();
 
     match op {
+        OperatorTypes::Lesser => {
+            let lhs = &mut *lhs;
+            let rhs = &mut *rhs;
+
+            Ok(
+                DataTypes::wrap(
+                    DataTypes::Bool(lhs.to_int().lt(rhs.to_int()))
+                )
+            )
+        },
+        OperatorTypes::LesserEq => {
+            let lhs = &mut *lhs;
+            let rhs = &mut *rhs;
+
+            Ok(
+                DataTypes::wrap(
+                    DataTypes::Bool(lhs.to_int().le(rhs.to_int()))
+                )
+            )
+        }
+        OperatorTypes::Greater => {
+            let lhs = &mut *lhs;
+            let rhs = &mut *rhs;
+
+            Ok(
+                DataTypes::wrap(
+                    DataTypes::Bool(lhs.to_int().gt(rhs.to_int()))
+                )
+            )
+        }
+        OperatorTypes::GreaterEq => {
+            let lhs = &mut *lhs;
+            let rhs = &mut *rhs;
+
+            Ok(
+                DataTypes::wrap(
+                    DataTypes::Bool(lhs.to_int().ge(rhs.to_int()))
+                )
+            )
+        }
         OperatorTypes::AddAssign => {
             let lhs = &mut *lhs;
             let rhs = &mut *rhs;
