@@ -3,6 +3,7 @@ use crate::core::native_function::NativeFunction;
 use crate::core::nodes::{Node, Nodes};
 use std::cell::RefCell;
 use std::collections::HashMap;
+use std::path::Path;
 use std::rc::Rc;
 use std::sync::RwLock;
 use crate::core::process::Process;
@@ -36,6 +37,20 @@ impl Scope {
 
     pub fn has(&self, key: String, value: &DataTypes) -> bool {
         self.variables.read().unwrap().contains_key(&key)
+    }
+
+    pub fn folder(&self) -> String {
+        let got = self.variables.read().unwrap();
+        let got = got.get("path").unwrap();
+        let got = got.borrow();
+        let got = got.to_string();
+
+        let path = Path::new(&got);
+        if let Some(path) = path.parent() {
+            path.to_str().unwrap().to_owned()
+        } else {
+            String::from("./")
+        }
     }
 
     pub fn from(scope: &Scope) -> Self {

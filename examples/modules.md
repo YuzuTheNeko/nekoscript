@@ -1,5 +1,5 @@
 # Modules
-Modules act just like files, but they can be used to load libraries or packages you installed on your own (not supported).
+Modules act just like files, but they can be used to load libraries or packages you installed on your own.
 
 There are some native modules that can be found [here](https://github.com/Rubenennj/nekoscript/tree/dev/src/native/modules)
 

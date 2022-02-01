@@ -34,7 +34,20 @@ impl Process {
         if let Some(module) = get_module(name.clone()) {
             Ok(module)
         } else {
-            panic!("Module {} not found", name);
+            let mut path = name.clone();
+            {
+                let borrow = scope.process.borrow();
+                path = format!("{}/libraries/{}/index.neko", borrow.folder(), path);
+            }
+
+            let cl = path.clone();
+            let path = Path::new(&cl);
+
+            if !path.exists() {
+                panic!("Module {} not found", name);
+            }
+
+            Self::load_file(scope, format!("libraries/{}/index.neko", name))
         }
     }
 
@@ -44,8 +57,7 @@ impl Process {
         }
 
         {
-            let borrow = scope.process.borrow();
-            pth = format!("{}/{}", borrow.folder(), pth);
+            pth = format!("{}/{}", scope.folder(), pth);
         }
 
         match canonicalize(&pth) {
