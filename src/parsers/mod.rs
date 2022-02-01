@@ -22,3 +22,4 @@ pub mod parse_return;
 pub mod parse_object_accessors;
 pub mod parse_ternary_op;
 pub mod parse_null;
+pub mod parse_break;

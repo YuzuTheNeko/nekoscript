@@ -1,6 +1,7 @@
 use crate::core::data_types::DataTypes;
 use crate::core::interpreter::IReturn;
 use crate::core::nodes::{Node, Nodes};
+use crate::core::return_types::ReturnTypes;
 use crate::core::scope::Scope;
 use crate::Interpreter;
 
@@ -20,7 +21,10 @@ pub fn resolve_while(itr: &Interpreter, scope: &Scope, node: &Node) -> IReturn {
                     }
                 }
             }
-            Err(e) => return Err(e),
+            Err(e) => match e {
+                ReturnTypes::Break => return Ok(DataTypes::null()),
+                _ => return Err(e)
+            },
         }
     }
 

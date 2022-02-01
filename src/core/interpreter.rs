@@ -14,6 +14,7 @@ use crate::runtime::resolve_while::resolve_while;
 use std::cell::RefCell;
 use std::rc::Rc;
 use crate::core::process::Process;
+use crate::runtime::resolve_break::resolve_break;
 use crate::runtime::resolve_object_accessor::resolve_object_accessor;
 use crate::runtime::resolve_return::resolve_return;
 use crate::runtime::resolve_ternary::resolve_ternary;
@@ -74,6 +75,7 @@ impl Interpreter {
             Nodes::While { .. } => resolve_while(self, scope, node),
             Nodes::Keyword(_) => resolve_keyword(self, scope, node),
             Nodes::FnDef { .. } => resolve_func_def(self, scope, node),
+            Nodes::Break => resolve_break(self, scope),
             Nodes::Scope { .. } => resolve_scope(self, scope, node),
             Nodes::BinaryExpr { .. } => resolve_binary(self, scope, node),
             Nodes::Value(value) => resolve_value(self, scope, node),

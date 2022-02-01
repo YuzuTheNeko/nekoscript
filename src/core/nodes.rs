@@ -1,4 +1,4 @@
-use crate::constants::keywords::WHILE_KEYWORD;
+use crate::constants::keywords::{BREAK_LOOP, WHILE_KEYWORD};
 use crate::core::data_types::DataTypes;
 use crate::core::operator_types::{OperatorTypes};
 use std::cell::RefCell;
@@ -36,6 +36,7 @@ pub enum Nodes {
         name: String,
         value: Box<Node>,
     },
+    Break,
     If {
         condition: Box<Node>,
         when_true: Box<Node>,
@@ -121,6 +122,7 @@ impl Nodes {
 impl Nodes {
     pub fn kind(&self) -> &str {
         match self {
+            Nodes::Break => BREAK_LOOP,
             Nodes::ObjectAccessor { .. } => "Accessor",
             Nodes::DynFnCall { .. } => "dyn fn call",
             Nodes::If { .. } => "If",

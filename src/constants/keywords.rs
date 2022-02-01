@@ -6,6 +6,8 @@ pub const ELSE_IF_KEYWORD: &str = "else if";
 
 pub const FUNCTION_DEFINITION: &str = "define";
 
+pub const BREAK_LOOP: &str = "break";
+
 pub const VARIABLE_KEYWORD: &str = "neko";
 
 pub const OBJECT_KEYWORD: &str = "object!";
@@ -19,8 +21,9 @@ pub const RETURN_KEYWORD: &str = "return";
 
 pub const DYN_FN: &str = "dyn";
 
-pub const KEYWORDS: [&str; 7] = [
+pub const KEYWORDS: [&str; 8] = [
     IF_KEYWORD,
+    BREAK_LOOP,
     WHILE_KEYWORD,
     OBJECT_KEYWORD,
     ELSE_KEYWORD,
