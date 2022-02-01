@@ -13,3 +13,6 @@ Once done, you can use `nekoscript` in any terminal/console allocated on your PC
 
 ## Updating
 Simply download the new release and replace the executable file with the newer one.
+
+## Other
+If you need proper indentation and highlighting on VSCode, use [this extension](https://marketplace.visualstudio.com/items?itemName=Rubenennj.nekoscript-lang).
