@@ -17,8 +17,11 @@ pub fn map() -> PrototypeNativeFunction {
                 let (params, body) = arg.to_dyn_fn();
 
                 let param_name = params.get(0).cloned().unwrap_or(String::new());
+                let param_name2 = params.get(1).cloned().unwrap_or(String::new());
 
                 let scope = Scope::from(scope);
+
+                let mut y = 0;
 
                 for i in arr.iter() {
                     if !param_name.is_empty() {
@@ -28,12 +31,29 @@ pub fn map() -> PrototypeNativeFunction {
                         }
                     }
 
+                    if !param_name2.is_empty() {
+                        {
+                            let mut writer = scope.variables.write().unwrap();
+                            writer.insert(param_name2.to_string(), DataTypes::wrap(DataTypes::Int(y)));
+                        }
+                    }
+
                     match itr.execute(&scope, body) {
                         Err(e) => match e {
                             ReturnTypes::Break => break,
+                            ReturnTypes::Return(val) => {
+                                let mut lhs = i.borrow_mut();
+                                let mut rhs = val.borrow_mut();
+
+                                *lhs = (*rhs).clone();
+
+                                y += 1;
+                            },
                             _ => return Err(e)
                         },
-                        _ => {}
+                        _ => {
+                            y += 1;
+                        }
                     }
                 }
             }
